@@ -1,0 +1,108 @@
+@import url('https://fonts.googleapis.com/css?family=Lato');
+
+* {
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Lato', sans-serif;
+    transition: all 0.2s ease;
+}
+
+body {
+    width: 100vw;
+    overflow-x: hidden;
+}
+
+.background {
+    width: 100vw;
+    min-height: 100vh;
+    background: linear-gradient(90deg, #a255eb, #1395ff);
+    padding-top: 100px;
+}
+
+.blue {
+    background-color: #1395ff;
+    color: white;
+}
+
+.container {
+    width: 100%;
+}
+
+.main {
+    width: calc(100% - 600px);
+    background-color: rgb(0,0,0,0.5);
+    border-radius: 15px 15px 0 0;
+    float: left;
+}
+
+.mainTop {
+    height: 50px;
+    margin: 0 auto;
+    color: white;
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    font-size: 18px;
+    overflow: hidden;
+}
+
+.mainContent {
+    background-color: white;
+    border-radius: 15px 15px 0 0;
+    width: 100%;
+    min-height: calc(100vh - 150px);
+    padding-top: 15px;
+}
+
+.side {
+    margin-top: 65px;
+    background-color: #eee;
+    float: left;
+    width: 300px;
+    min-height: calc(100vh - 165px);
+    padding: 5px;
+}
+
+.subPost {
+    width: 250px;
+    margin: 25px;
+    height: 55px;
+    border-radius: 5px;
+    background-color: #0365b6;
+    cursor: pointer;
+}
+
+.subPost:hover {
+    margin-top: 30px;
+    height: 50px;
+}
+
+.subPostInner {
+    text-align: center;
+    background-color: #1395ff;
+    border-radius: 5px;
+    padding-top: 8px;
+    height: 50px;
+    color: white;
+    font-size: 25px;
+}
+
+
+.subName {
+    font-size: 30px;
+    text-align: center;
+    padding-bottom: 15px;
+}
+
+.content {
+    width: 100%;
+    height: 75px;
+    padding: 5px;
+    display: flex;
+}
+
+.content:hover {
+    background-color: rgb(245, 245, 245);
+}
