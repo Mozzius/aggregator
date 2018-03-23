@@ -5,6 +5,7 @@
     box-sizing: border-box;
     font-family: 'Lato', sans-serif;
     transition: background-color 0.2s ease;
+    transition: border 0.2s ease;
 }
 
 body {
@@ -15,7 +16,8 @@ body {
 .background {
     width: 100vw;
     min-height: 100vh;
-    background: linear-gradient(90deg, #a255eb, #1395ff);
+    /* #a255eb */
+    background: linear-gradient(90deg, #0365b6, #1395ff);
     padding-top: 100px;
 }
 
@@ -53,31 +55,35 @@ body {
 }
 
 .mainContent {
-    background-color: white;
-    border-radius: 15px 0 0 0;
+    background-color: #fff;
+    box-shadow: 0 0 4px #333;
+    border-radius: 15px 15px 0 0;
     width: 100%;
     min-height: calc(100vh - 150px);
     overflow: hidden;
+    position: relative;
 }
 
 .left {
     width: 300px;
     margin-top: 65px;
     float: left;
+    background-color: #fff;
+    min-height: calc(100vh - 165px);
 }
 
 .leftItem {
-    width: 100%;
+    width: 295px;
+    border-left: 5px solid #fff;
     height: 80px;
-    color: white;
+    color: #626262;
     padding: 27px 0 0 25px;
     font-size: 20px;
 }
 
 .leftItem:hover {
-    background-color: rgb(0,0,0,0.5);
+    border-left: 5px solid #626262;
 }
-
 .right {
     float: left;
     width: 300px;
@@ -85,8 +91,9 @@ body {
 
 .search {
     color: white;
-    height: 50px;
-    padding: 10px;
+    height: 65px;
+    padding: 25px 0 0 20px;
+    font-size: 18px;
 }
 
 .sidebar {
@@ -94,20 +101,20 @@ body {
     float: left;
     width: 300px;
     min-height: calc(100vh - 150px);
-    padding: 5px;
 }
 
 .subPost {
     width: 250px;
-    margin: 25px;
+    margin: 20px;
     height: 55px;
     border-radius: 5px;
     background-color: #0365b6;
     cursor: pointer;
+    transition: all 0.2s ease;
 }
 
 .subPost:hover {
-    margin-top: 30px;
+    margin-top: 25px;
     height: 50px;
 }
 
@@ -128,12 +135,14 @@ body {
 }
 
 .post {
-    width: 100%;
+    width: calc(100% - 5px);
     display: flex;
+    border-left: 5px solid #fff;
 }
 
 .post:hover {
     background-color: rgb(245, 245, 245);
+    border-left: 5px solid rgb(245, 245, 245);
 }
 
 .postInner {
@@ -153,8 +162,28 @@ body {
     border-bottom: 1px #1395ff solid;
     margin-bottom: 3px;
     line-height: 25px;
+    cursor: pointer;
 }
 
 .postSub {
     margin: 5px 0 10px;
+    font-size: 14px;
+    color: #626262;
+}
+
+
+.active, .active:hover {
+    border-left: 5px solid #0365b6;
+}
+
+.upvoted, .upvoted:hover {
+    border-left: 5px solid #ec8f24;
+}
+
+.downvoted, upvoted:hover {
+    border-left: 5px solid #6503b6;
+}
+
+.reported, reported:hover {
+    border-left: 5px solid #b80404;
 }

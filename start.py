@@ -4,7 +4,30 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('roddit.html')
+    return sub('frontpage')
+
+@app.route('/r/<subname>')
+def sub(subname):
+    posts = [{
+        'thumbnail': 'https://i.imgur.com/myE1tkjs.jpg',
+        'title': 'Cute lil pupper',
+        'comments': 3,
+        'user': 'mozzius',
+        'sub': 'rarepuppers'
+    },{
+        'thumbnail': 'https://i.imgur.com/myE1tkjs.jpg',
+        'title': 'Pupperinos are the best!',
+        'comments': 0,
+        'user': 'mozzius',
+        'sub': 'rarepuppers'
+    },{
+        'thumbnail': 'https://i.imgur.com/myE1tkjs.jpg',
+        'title': 'woofer alert',
+        'comments': 5,
+        'user': 'mozzius',
+        'sub': 'rarepuppers'
+    }]
+    return render_template('roddit.html',subName=subname,posts=posts)
 
 if __name__ == '__main__':
-    app.run(debug=True,host='0.0.0.0')
+    app.run(port=2018,debug=True,host='0.0.0.0')

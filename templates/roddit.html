@@ -3,16 +3,22 @@
 
 <head>
     <title>Roddit</title>
-    <link rel="stylesheet" href="static/roddit.css">
+    <link rel="stylesheet" href="/static/roddit.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js" integrity="sha384-SlE991lGASHoBfWbelyBPLsUlwY1GwNDJo3jSJO04KZ33K2bwfV9YBauFfnzvynJ" crossorigin="anonymous"></script>
 </head>
 
 <body>
     <div class="background">
         <div class="container">
             <div class="left">
-                <div class="leftItem">Frontpage</div>
-                <div class="leftItem">All</div>
-                <div class="leftItem">Popular</div>
+                {% if subName == 'frontpage' %}
+                <div class="leftItem active"><i class="fa fa-home"></i>&nbsp;&nbsp; Frontpage</div>
+                {% else %}
+                <div class="leftItem"><i class="fa fa-house"></i>&nbsp;&nbsp; Frontpage</div>
+                {% endif %}
+                <div class="leftItem"><i class="fa fa-globe"></i>&nbsp;&nbsp; All</div>
+                <div class="leftItem"><i class="fa fa-rss"></i>&nbsp;&nbsp; Subscriptions</div>
+                <div class="voting"></div>
             </div>
             <div class="main">
                 <div class="mainTop">
@@ -23,66 +29,29 @@
                     <p>Top</p>
                 </div>
                 <div class="mainContent">
+                    {% for post in posts %}
                     <div class="post">
-                        <img class="thumbnail" src="https://i.imgur.com/myE1tkjs.jpg" alt="thumbnail" />
+                        <img class="thumbnail" src="{{ post.thumbnail }}" alt="thumbnail" />
                         <div class="postInner">
-                            <span class="postTitle">Hello World! This is a post :)</span>
-                            <p class="postSub"><a>10 comments</a> &middot; submitted by <a>/u/mozzius</a> to <a>/r/example</a></p>
+                            <span class="postTitle">{{ post.title }}</span>
+                            <p class="postSub"><a>{{ post.comments }} comments</a> &middot; submitted by <a>/u/{{ post.user }}</a> to <a>/r/{{ post.sub }}</a></p>
                         </div>
                     </div>
-                    <div class="post">
-                        <img class="thumbnail" src="https://i.imgur.com/myE1tkjs.jpg" alt="thumbnail" />
-                        <div class="postInner">
-                            <span class="postTitle">This is a really really really really really really really long title, for testing dolphins. Wait no, testing purposes? Yeah. That's the one I mean.</span>
-                            <p class="postSub"><a>10 comments</a> &middot; submitted by <a>/u/mozzius</a> to <a>/r/example</a></p>
-                        </div>
-                    </div>
-                    <div class="post">
-                        <img class="thumbnail" src="https://i.imgur.com/myE1tkjs.jpg" alt="thumbnail" />
-                        <div class="postInner">
-                            <span class="postTitle">Hello World! This is a post :)</span>
-                            <p class="postSub"><a>10 comments</a> &middot; submitted by <a>/u/mozzius</a> to <a>/r/example</a></p>
-                        </div>
-                    </div>
-                    <div class="post">
-                        <img class="thumbnail" src="https://i.imgur.com/myE1tkjs.jpg" alt="thumbnail" />
-                        <div class="postInner">
-                            <span class="postTitle">Hello World! This is a post :)</span>
-                            <p class="postSub"><a>10 comments</a> &middot; submitted by <a>/u/mozzius</a> to <a>/r/example</a></p>
-                        </div>
-                    </div>
-                    <div class="post">
-                        <img class="thumbnail" src="https://i.imgur.com/myE1tkjs.jpg" alt="thumbnail" />
-                        <div class="postInner">
-                            <span class="postTitle">Hello World! This is a post :)</span>
-                            <p class="postSub"><a>10 comments</a> &middot; submitted by <a>/u/mozzius</a> to <a>/r/example</a></p>
-                        </div>
-                    </div>
-                    <div class="post">
-                        <img class="thumbnail" src="https://i.imgur.com/myE1tkjs.jpg" alt="thumbnail" />
-                        <div class="postInner">
-                            <span class="postTitle">Hello World! This is a post :)</span>
-                            <p class="postSub"><a>10 comments</a> &middot; submitted by <a>/u/mozzius</a> to <a>/r/example</a></p>
-                        </div>
-                    </div>
-                    <div class="post">
-                        <img class="thumbnail" src="https://i.imgur.com/myE1tkjs.jpg" alt="thumbnail" />
-                        <div class="postInner">
-                            <span class="postTitle">Hello World! This is a post :)</span>
-                            <p class="postSub"><a>10 comments</a> &middot; submitted by <a>/u/mozzius</a> to <a>/r/example</a></p>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
-            <div class="sidebar">
-                <div class="subPost">
-                    <div class="subPostInner">Post Something</div>
+            <div class="right">
+                <div class="search"><i class="fa fa-search"></i>&nbsp; Search</div>
+                <div class="sidebar">
+                    <div class="subPost">
+                        <div class="subPostInner">Post Something</div>
+                    </div>
+                    <p class="subName">/r/{{ subName }}</p>
+                    <ul>
+                        <li><b>Rule 1:</b> Be nice</li>
+                        <li><b>Rule 2:</b> Don't be not nice</li>
+                    </ul>
                 </div>
-                <p class="subName">/r/frontpage</p>
-                <ul>
-                    <li><b>Rule 1:</b> Be nice</li>
-                    <li><b>Rule 2:</b> Don't be not nice</li>
-                </ul>
             </div>
         </div>
     </div>
