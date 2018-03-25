@@ -27,6 +27,7 @@ def sub(subname):
         'user': 'mozzius',
         'sub': 'rarepuppers'
     }]
+    posts = False
     return render_template('roddit.html',subName=subname,posts=posts)
 
 if __name__ == '__main__':
