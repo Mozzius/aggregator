@@ -12,26 +12,30 @@
     <div class="background">
         <div class="container">
             <div class="left">
-                <div class="leftItem {% if page == 'frontpage' %}active{% endif %}"><i class="fa fa-house"></i>&nbsp;&nbsp; Frontpage</div>
-                <div class="leftItem {% if page == 'all' %}active{% endif %}"><i class="fa fa-globe"></i>&nbsp;&nbsp; All</div>
-                <div class="leftItem {% if page == 'subscriptions' %}active{% endif %}"><i class="fa fa-rss"></i>&nbsp;&nbsp; Subscriptions</div>
+                <a href="/"><div class="leftItem {% if page.name == 'frontpage' %}active{% endif %}"><i class="fa fa-home"></i>&nbsp;&nbsp; Frontpage</div></a>
+                <a href="/r/all"><div class="leftItem {% if page.name == 'all' %}active{% endif %}"><i class="fa fa-globe"></i>&nbsp;&nbsp; All</div></a>
+                <!-- <div class="leftItem {% if page == 'subscriptions' %}active{% endif %}"><i class="fa fa-rss"></i>&nbsp;&nbsp; Subscriptions</div> -->
             </div>
             <div class="main">
                 <div class="mainTop">
-                    <p>Hot</p>
-                    <p>New</p>
-                    <p>Rising</p>
-                    <p>Controversial</p>
-                    <p>Top</p>
+                    {% if page %}
+                    <a href="/r/{{ page.name }}/hot"><p>Hot</p></a>
+                    <a href="/r/{{ page.name }}/hot"><p>New</p></a>
+                    <a href="/r/{{ page.name }}/top"><p>Top</p></a>
+                    {% endif %}
                 </div>
                 <div class="mainContent">
-                    {% if posts %}
+                    {% if posts and page %}
                         {% for post in posts %}
                         <div class="post">
-                            <img class="thumbnail" src="{{ post.thumbnail }}" alt="thumbnail" />
+                            <a href="{{ post.link }}">
+                                <img class="thumbnail" src="{{ post.thumbnail }}" alt="thumbnail" />
+                            </a>
                             <div class="postInner">
-                                <span class="postTitle">{{ post.title }}</span>
-                                <p class="postSub"><a>{{ post.comments }} comments</a> &middot; submitted by <a>/u/{{ post.user }}</a> to <a>/r/{{ post.sub }}</a></p>
+                                <a href="{{ post.link }}">
+                                    <span class="postTitle">{{ post.title }}</span>
+                                </a>
+                                <p class="postSub"><a href="/r/{{ post.sub }}/post/{{ post._id }}">{{ post.comments }} comments</a> &middot; submitted by <a href="/u/{{ post.user_id }}">/u/{{ post.user_name }}</a> to <a href="/r/{{ post.sub }}">/r/{{ post.sub }}</a></p>
                             </div>
                         </div>
                         {% endfor %}
@@ -51,15 +55,21 @@
                     <div class="subPost">
                         <div class="subPostInner">Post Something</div>
                     </div>
-                    <p class="subName">/r/{{ page }}</p>
-                    <ul>
-                        <li><b>Rule 1:</b> Be nice</li>
-                        <li><b>Rule 2:</b> Don't be not nice</li>
-                    </ul>
+                    <p class="subName">/r/{% if page %}{{ page.name }}{% else %}404{% endif %}</p>
+                    <div class="sidebarContent">
+                        {{ page.sidebar }}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        var primary = "{{ page.primary }}";
+        var secondary = "{{ page.secondary }}";
+        if (primary && secondary) {
+            document.getElementsByClassName('background')[0].style.background = "linear-gradient(90deg, "+secondary+", "+primary+")"
+        }
+    </script>
 </body>
 
 </html>

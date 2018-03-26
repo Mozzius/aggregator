@@ -4,13 +4,19 @@ import db
 app = Flask(__name__)
 
 @app.route('/')
-def index():
-    return sub('frontpage')
-
 @app.route('/r/<subname>')
-def sub(subname):
-    posts = db.getPosts(subname)
-    return render_template('roddit.html',subName=subname,posts=posts)
+@app.route('/r/<subname>/<sort>')
+def sub(subname='frontpage',sort='hot'):
+    if sort == 'post':
+        sort = 'hot'
+    page = db.getSub(subname)
+    if sort == 'hot':
+        posts = db.hot(subname)
+    elif sort == 'new':
+        posts = db.new(subname)
+    else:
+        posts = False
+    return render_template('roddit.html',page=page,posts=posts)
 
 if __name__ == '__main__':
     app.run(port=2018,debug=True,host='0.0.0.0')
