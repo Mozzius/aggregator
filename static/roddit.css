@@ -16,8 +16,9 @@ body {
 .background {
     width: 100vw;
     min-height: 100vh;
-    /* #a255eb */
-    background: linear-gradient(90deg, #0365b6, #1395ff);
+    /* purple: #a255eb */
+    /* blue: #0365b6 */
+    background: linear-gradient(90deg, #8727e0, #1395ff);
     padding-top: 100px;
 }
 
@@ -171,6 +172,18 @@ body {
     color: #626262;
 }
 
+.notfound {
+    display: flex;
+    width: 100%;
+}
+
+.notfoundContent {
+    margin: 30px auto 0;
+}
+
+.notfoundContent > h1 {
+    font-size: 100px;
+}
 
 .active, .active:hover {
     border-left: 5px solid #0365b6;

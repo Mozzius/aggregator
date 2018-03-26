@@ -10,7 +10,6 @@ def index():
 @app.route('/r/<subname>')
 def sub(subname):
     posts = db.getPosts(subname)
-    print(posts)
     return render_template('roddit.html',subName=subname,posts=posts)
 
 if __name__ == '__main__':
