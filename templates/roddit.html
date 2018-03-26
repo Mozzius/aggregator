@@ -4,6 +4,7 @@
 <head>
     <title>Roddit</title>
     <link rel="stylesheet" href="/static/roddit.css">
+    <script defer src="/static/roddit.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js" integrity="sha384-SlE991lGASHoBfWbelyBPLsUlwY1GwNDJo3jSJO04KZ33K2bwfV9YBauFfnzvynJ" crossorigin="anonymous"></script>
 </head>
 
@@ -11,14 +12,9 @@
     <div class="background">
         <div class="container">
             <div class="left">
-                {% if subName == 'frontpage' %}
-                <div class="leftItem active"><i class="fa fa-home"></i>&nbsp;&nbsp; Frontpage</div>
-                {% else %}
-                <div class="leftItem"><i class="fa fa-house"></i>&nbsp;&nbsp; Frontpage</div>
-                {% endif %}
-                <div class="leftItem"><i class="fa fa-globe"></i>&nbsp;&nbsp; All</div>
-                <div class="leftItem"><i class="fa fa-rss"></i>&nbsp;&nbsp; Subscriptions</div>
-                <div class="voting"></div>
+                <div class="leftItem {% if page == 'frontpage' %}active{% endif %}"><i class="fa fa-house"></i>&nbsp;&nbsp; Frontpage</div>
+                <div class="leftItem {% if page == 'all' %}active{% endif %}"><i class="fa fa-globe"></i>&nbsp;&nbsp; All</div>
+                <div class="leftItem {% if page == 'subscriptions' %}active{% endif %}"><i class="fa fa-rss"></i>&nbsp;&nbsp; Subscriptions</div>
             </div>
             <div class="main">
                 <div class="mainTop">
@@ -46,7 +42,7 @@
                     <div class="subPost">
                         <div class="subPostInner">Post Something</div>
                     </div>
-                    <p class="subName">/r/{{ subName }}</p>
+                    <p class="subName">/r/{{ page }}</p>
                     <ul>
                         <li><b>Rule 1:</b> Be nice</li>
                         <li><b>Rule 2:</b> Don't be not nice</li>

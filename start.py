@@ -1,4 +1,5 @@
 from flask import Flask, render_template, url_for
+import db
 
 app = Flask(__name__)
 
@@ -8,25 +9,8 @@ def index():
 
 @app.route('/r/<subname>')
 def sub(subname):
-    posts = [{
-        'thumbnail': 'https://i.imgur.com/myE1tkjs.jpg',
-        'title': 'Cute lil pupper',
-        'comments': 3,
-        'user': 'mozzius',
-        'sub': 'rarepuppers'
-    },{
-        'thumbnail': 'https://i.imgur.com/myE1tkjs.jpg',
-        'title': 'Pupperinos are the best!',
-        'comments': 0,
-        'user': 'mozzius',
-        'sub': 'rarepuppers'
-    },{
-        'thumbnail': 'https://i.imgur.com/myE1tkjs.jpg',
-        'title': 'woofer alert',
-        'comments': 5,
-        'user': 'mozzius',
-        'sub': 'rarepuppers'
-    }]
+    posts = db.getPosts(subname)
+    print(posts)
     return render_template('roddit.html',subName=subname,posts=posts)
 
 if __name__ == '__main__':
