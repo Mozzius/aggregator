@@ -134,7 +134,7 @@ a {
 
 .subPost {
     width: 260px;
-    margin: 20px;
+    margin: 20px 20px 5px;
     height: 55px;
     border-radius: 5px;
     background-color: #0365b6;
@@ -160,7 +160,7 @@ a {
 .subName {
     font-size: 30px;
     text-align: center;
-    padding-bottom: 15px;
+    padding: 15px 0;
 }
 
 .post {

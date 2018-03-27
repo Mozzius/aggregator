@@ -7,8 +7,6 @@ app = Flask(__name__)
 @app.route('/r/<subname>')
 @app.route('/r/<subname>/<sort>')
 def sub(subname='frontpage',sort='hot'):
-    if not sort:
-        sort = 'hot'
     page = db.getSub(subname)
     if sort == 'hot':
         posts = db.hot(subname)
@@ -24,13 +22,19 @@ def sub(subname='frontpage',sort='hot'):
         posts = False
     return render_template('roddit.html',page=page,posts=posts,type='sub')
 
+@app.route('/r/<subname>/submit')
+def submit(subname):
+    page = db.getSub(subname)
+    return render_template('roddit.html',page=page,type='submit')
+
+
 @app.route('/u/<user>')
 def user(user):
     user = db.getUser(user)
     print(user)
     posts = []
     if user:
-        posts = db.getUserPosts(user.name)
+        posts = db.getUserPosts(user['_id'])
     return render_template('roddit.html',page=user,posts=posts,type='user')
 
 if __name__ == '__main__':
