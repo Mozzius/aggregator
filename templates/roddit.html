@@ -4,7 +4,8 @@
 <head>
     <title>Roddit</title>
     <link rel="stylesheet" href="/static/roddit.css">
-    <script defer src="/static/roddit.js"></script>
+    <script src="/static/voting.js"></script>
+    <script defer src="/static/index.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js" integrity="sha384-SlE991lGASHoBfWbelyBPLsUlwY1GwNDJo3jSJO04KZ33K2bwfV9YBauFfnzvynJ" crossorigin="anonymous"></script>
 </head>
 
@@ -12,22 +13,34 @@
     <div class="background">
         <div class="container">
             <div class="left">
-                <a href="/"><div class="leftItem {% if page.name == 'frontpage' %}active{% endif %}"><i class="fa fa-home"></i>&nbsp;&nbsp; Frontpage</div></a>
-                <a href="/r/all"><div class="leftItem {% if page.name == 'all' %}active{% endif %}"><i class="fa fa-globe"></i>&nbsp;&nbsp; All</div></a>
-                <!-- <div class="leftItem {% if page == 'subscriptions' %}active{% endif %}"><i class="fa fa-rss"></i>&nbsp;&nbsp; Subscriptions</div> -->
+                <div class="toggle" onclick="toggleLeft()">
+                    <i class="fa fa-caret-right" id="toggleleft"></i>
+                </div>
+                <div class="leftInner">
+                    <a href="/"><div class="leftItem {% if page.name == 'frontpage' %}active{% endif %}"><i class="fa fa-home"></i>&nbsp;&nbsp; Frontpage</div></a>
+                    <a href="/r/all"><div class="leftItem {% if page.name == 'all' %}active{% endif %}"><i class="fa fa-globe"></i>&nbsp;&nbsp; All</div></a>
+                    <!-- <div class="leftItem {% if page == 'subscriptions' %}active{% endif %}"><i class="fa fa-rss"></i>&nbsp;&nbsp; Subscriptions</div> -->
+                </div>
             </div>
             <div class="main">
                 <div class="mainTop">
                     {% if page %}
                     <a href="/r/{{ page.name }}/hot"><p>Hot</p></a>
-                    <a href="/r/{{ page.name }}/hot"><p>New</p></a>
+                    <a href="/r/{{ page.name }}/new"><p>New</p></a>
                     <a href="/r/{{ page.name }}/top"><p>Top</p></a>
+                    <a href="/r/{{ page.name }}/controversial"><p>Controversial</p></a>
                     {% endif %}
                 </div>
                 <div class="mainContent">
                     {% if posts and page %}
                         {% for post in posts %}
                         <div class="post">
+                            <div class="voting" id="{{ post._id }}">
+                                <i class="fa fa-caret-up"></i>
+                                <p>{{ post.score }}</p>
+                                <i class="fa fa-caret-down"></i>
+                                <script defer>addPost('{{ post._id }}')</script>
+                            </div>
                             <a href="{{ post.link }}">
                                 <img class="thumbnail" src="{{ post.thumbnail }}" alt="thumbnail" />
                             </a>
@@ -35,7 +48,7 @@
                                 <a href="{{ post.link }}">
                                     <span class="postTitle">{{ post.title }}</span>
                                 </a>
-                                <p class="postSub"><a href="/r/{{ post.sub }}/post/{{ post._id }}">{{ post.comments }} comments</a> &middot; submitted by <a href="/u/{{ post.user_id }}">/u/{{ post.user_name }}</a> to <a href="/r/{{ post.sub }}">/r/{{ post.sub }}</a></p>
+                                <p class="postSub"><a href="/r/{{ post.sub }}/post/{{ post._id }}">{{ post.comments }} comments</a> &middot; submitted by <a href="/u/{{ post.user_name }}">/u/{{ post.user_name }}</a> to <a href="/r/{{ post.sub }}">/r/{{ post.sub }}</a></p>
                             </div>
                         </div>
                         {% endfor %}
@@ -55,7 +68,7 @@
                     <div class="subPost">
                         <div class="subPostInner">Post Something</div>
                     </div>
-                    <p class="subName">/r/{% if page %}{{ page.name }}{% else %}404{% endif %}</p>
+                    <p class="subName">/{% if type == 'user' %}u{% else %}r{% endif %}/{% if page %}{{ page.name }}{% else %}404{% endif %}</p>
                     <div class="sidebarContent">
                         {{ page.sidebar }}
                     </div>

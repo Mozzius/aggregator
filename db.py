@@ -20,13 +20,23 @@ def getPosts(sub):
         return posts.find({'sub':sub})
 
 def hot(sub):
+    # TODO: Sorting algorithm
     return list(getPosts(sub))
 
 def new(sub):
-    return list(posts.find().sort('date',pymongo.DECENDING))
+    return list(getPosts(sub).sort('date',pymongo.DESCENDING))
 
 def top(sub):
-    return list(posts.find().sort('score',pymongo.DECENDING))
+    return list(getPosts(sub).sort('score',pymongo.DESCENDING))
+
+def controversial(sub):
+    return list(getPosts(sub).sort('score',pymongo.ASCENDING))
 
 def getSub(name):
     return subs.find_one({'name':name})
+
+def getUser(id):
+    return users.find_one({'_id':id})
+
+def getUserPosts(id):
+    return users.find({'user_id':id}).sort('date',pymongo.DESCENDING)
