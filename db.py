@@ -39,4 +39,4 @@ def getUser(name):
     return users.find_one({'name':name})
 
 def getUserPosts(id):
-    return users.find({'user_id':id}).sort('date',pymongo.DESCENDING)
+    return list(posts.find({'user_id':id}).sort('date',pymongo.DESCENDING))

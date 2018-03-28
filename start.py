@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, redirect, session, request
 import db
 
 app = Flask(__name__)
@@ -20,21 +20,41 @@ def sub(subname='frontpage',sort='hot'):
         posts = db.controversial(subname)
     else:
         posts = False
-    return render_template('roddit.html',page=page,posts=posts,type='sub')
+    return render_template('roddit.html',page=page,posts=posts,type='sub',user={'name':'mozzius'})
 
 @app.route('/r/<subname>/submit')
 def submit(subname):
     page = db.getSub(subname)
     return render_template('roddit.html',page=page,type='submit')
 
+@app.route('/signin', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        form = request.form
+        if db.checkLogin(form['email'],form['password']):
+            session['loggedin'] = True
+            session['name'] = db.user['name']
+            session['email'] = db.user['email']
+            return redirect('/')
+        else:
+            return render_template('login.html', fail = True)
+    else:
+        if 'loggedin' in session and session['loggedin'] == True:
+            return redirect('/')
+        return render_template('login.html', fail=False)
+
+@app.route('/signout')
+def logout():
+    session.clear()
+    return redirect('/')
 
 @app.route('/u/<user>')
 def user(user):
     user = db.getUser(user)
-    print(user)
     posts = []
     if user:
         posts = db.getUserPosts(user['_id'])
+        print(posts)
     return render_template('roddit.html',page=user,posts=posts,type='user')
 
 if __name__ == '__main__':

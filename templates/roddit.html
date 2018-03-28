@@ -11,14 +11,26 @@
 
 <body>
     <div class="background">
+        <div class="top">
+            <div class="topLeft">
+                Roddit
+            </div>
+            <div class="topRight">
+                {% if user %}
+                Welcome back, <a href="/u/{{ user.name }}">{{ user.name }}</a>! (<a href="/signout">sign out</a>)
+                {% else %}
+                <a href="/signin">Sign in</a>
+                {% endif %}
+            </div>
+        </div>
         <div class="container">
             <div class="left">
                 <div class="toggle" onclick="toggleLeft()">
                     <i class="fa fa-caret-right" id="toggleleft"></i>
                 </div>
                 <div class="leftInner">
-                    <a href="/"><div class="leftItem {% if page.name == 'frontpage' %}active{% endif %}"><i class="fa fa-home"></i>&nbsp;&nbsp; Frontpage</div></a>
-                    <a href="/r/all"><div class="leftItem {% if page.name == 'all' %}active{% endif %}"><i class="fa fa-globe"></i>&nbsp;&nbsp; All</div></a>
+                    <a href="/"><div class="leftItem {% if page.name == 'frontpage' %}active{% endif %}"><i class="fa fa-home"></i>&nbsp;&nbsp;&nbsp; Frontpage</div></a>
+                    <a href="/r/all"><div class="leftItem {% if page.name == 'all' %}active{% endif %}"><i class="fa fa-globe"></i>&nbsp;&nbsp;&nbsp; All</div></a>
                     <!-- <div class="leftItem {% if page == 'subscriptions' %}active{% endif %}"><i class="fa fa-rss"></i>&nbsp;&nbsp; Subscriptions</div> -->
                 </div>
             </div>
