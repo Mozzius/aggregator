@@ -17,9 +17,9 @@
             </div>
             <div class="topRight">
                 {% if user %}
-                Welcome back, <a href="/u/{{ user.name }}">{{ user.name }}</a>! (<a href="/signout">sign out</a>)
+                Welcome back, <a href="/u/{{ user.name }}">{{ user.name }}</a>! (<a href="/logout">log out</a>)
                 {% else %}
-                <a href="/signin">Sign in</a>
+                <a href="/login">Log in</a> / <a href="/signup">Sign up</a>
                 {% endif %}
             </div>
         </div>
@@ -70,6 +70,8 @@
                         </div>
                         this doesn't work yet
                         <div class="createPost"></div>
+                    {% elif type == 'login'}
+
                     {% else %}
                         <div class="notfound">
                             <div class="notfoundContent">
