@@ -22,10 +22,11 @@ def sub(subname='frontpage',sort='hot'):
         posts = db.controversial(subname)
     else:
         posts = False
+    if 
     return render_template('roddit.html',page=page,posts=posts,type='sub',user={'name':'mozzius'})
 
 @app.route('/r/<subname>/submit')
-@login_required
+@login.login_required
 def submit(subname,methods=['GET','POST']):
     page = db.getSub(subname)
     if request.method == 'POST':
@@ -62,7 +63,8 @@ def signup():
     # doesn't work in the slightest
     if request.method == 'POST':
         form = request.form
-        if db.checkLogin(form['email'],form['password']):
+        success = db.addUser(form)
+        if success:
             session['loggedin'] = True
             session['name'] = db.user['name']
             session['email'] = db.user['email']
@@ -77,7 +79,7 @@ def signup():
 
 @app.route('/logout')
 def logout():
-    session.clear()
+    flask_login.logout_user()
     return redirect('/')
 
 @app.route('/u/<user>')

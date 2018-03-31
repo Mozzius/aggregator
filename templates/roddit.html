@@ -16,7 +16,7 @@
                 Roddit
             </div>
             <div class="topRight">
-                {% if user %}
+                {% if is_authenticated %}
                 Welcome back, <a href="/u/{{ user.name }}">{{ user.name }}</a>! (<a href="/logout">log out</a>)
                 {% else %}
                 <a href="/login">Log in</a> / <a href="/signup">Sign up</a>
