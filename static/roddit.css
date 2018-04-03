@@ -35,7 +35,7 @@ a {
     padding: 5px;
 }
 
-.topLeft {
+.topLeft > a {
     float: left;
     color: #fff;
 }
@@ -258,6 +258,14 @@ a {
 .sidebarContent {
     padding: 10px;
     width: 100%;
+}
+
+.form {
+    padding: 10px;
+}
+
+.formTitle {
+    font-size: 20px;
 }
 
 .notfound {

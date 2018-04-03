@@ -35,8 +35,8 @@ def controversial(sub):
 def getSub(name):
     return subs.find_one({'name':name})
 
-def getUser(name):
-    return users.find_one({'name':name})
+def getUser(name,prop='name'):
+    return users.find_one({prop:name})
 
 def getUserPosts(id):
     return list(posts.find({'user_id':id}).sort('date',pymongo.DESCENDING))

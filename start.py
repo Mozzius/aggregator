@@ -1,9 +1,41 @@
 from flask import Flask, render_template, url_for, redirect, session, request
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
+import hashlib
 import db
 
 app = Flask(__name__)
 login = LoginManager(app)
+
+def sha256(msg):
+    return hashlib.sha256(msg).digest()
+
+class User():
+    def __init__(self,username):
+        self.username = username
+    
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return self.username
+
+    @staticmethod
+    def validate_login(pw_hash, password):
+        return pw_hash == sha256(password)
+
+@login.user_loader
+def loadUser(userid):
+    user = db.getUser(userid,'_id')
+    if user:
+        return User(userid)
+    else:
+        return None
 
 @app.route('/')
 @app.route('/r/<subname>')
@@ -22,11 +54,10 @@ def sub(subname='frontpage',sort='hot'):
         posts = db.controversial(subname)
     else:
         posts = False
-    if 
     return render_template('roddit.html',page=page,posts=posts,type='sub',user={'name':'mozzius'})
 
 @app.route('/r/<subname>/submit')
-@login.login_required
+@login_required
 def submit(subname,methods=['GET','POST']):
     page = db.getSub(subname)
     if request.method == 'POST':

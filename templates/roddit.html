@@ -13,7 +13,7 @@
     <div class="background">
         <div class="top">
             <div class="topLeft">
-                Roddit
+                <a href="/">Roddit</a>
             </div>
             <div class="topRight">
                 {% if is_authenticated %}
@@ -29,9 +29,9 @@
                     <i class="fa fa-caret-right" id="toggleleft"></i>
                 </div>
                 <div class="leftInner">
-                    <a href="/"><div class="leftItem {% if page.name == 'frontpage' %}active{% endif %}"><i class="fa fa-home"></i>&nbsp;&nbsp;&nbsp; Frontpage</div></a>
-                    <a href="/r/all"><div class="leftItem {% if page.name == 'all' %}active{% endif %}"><i class="fa fa-globe"></i>&nbsp;&nbsp;&nbsp; All</div></a>
-                    <!-- <div class="leftItem {% if page == 'subscriptions' %}active{% endif %}"><i class="fa fa-rss"></i>&nbsp;&nbsp; Subscriptions</div> -->
+                    <a href="/"><div class="leftItem {% if page and page.name == 'frontpage' %}active{% endif %}"><i class="fa fa-home"></i>&nbsp;&nbsp;&nbsp; Frontpage</div></a>
+                    <a href="/r/all"><div class="leftItem {% if page and page.name == 'all' %}active{% endif %}"><i class="fa fa-globe"></i>&nbsp;&nbsp;&nbsp; All</div></a>
+                    <!-- <div class="leftItem {% if page and page == 'subscriptions' %}active{% endif %}"><i class="fa fa-rss"></i>&nbsp;&nbsp; Subscriptions</div> -->
                 </div>
             </div>
             <div class="main">
@@ -65,13 +65,42 @@
                         </div>
                         {% endfor %}
                     {% elif type == 'submit' %}
-                        <div class="createPostTitle">
+                        <div class="formTitle">
                             Submit a post to /r/{{ page.name }}
                         </div>
                         this doesn't work yet
-                        <div class="createPost"></div>
-                    {% elif type == 'login'}
-
+                        <form action="submit"></form>
+                    {% elif type == 'signup' %}
+                    <div class="form">
+                            <div class="formTitle">
+                                Log in to Roddit
+                            </div>
+                            {% if fail %}
+                            <div class="fail">Your </div>
+                            {% endif %}
+                            <form action="signup" method="POST">
+                                <p>Username:</p>
+                                <input type="text" name="username"><br>
+                                <p>Email:</p>
+                                <input type="email" name="email"><br>
+                                <p>Password</p>
+                                <input type="password" name="password"><br>
+                                <input type="submit" value="Sign up">
+                            </form>
+                        </div>
+                    {% elif type == 'login' %}
+                        <div class="form">
+                            <div class="formTitle">
+                                Log in to Roddit
+                            </div>
+                            <form action="login" method="POST">
+                                <p>Email:</p>
+                                <input type="email" name="email"><br>
+                                <p>Password</p>
+                                <input type="password" name="password"><br>
+                                <input type="submit" value="Log in">
+                            </form>
+                        </div>
                     {% else %}
                         <div class="notfound">
                             <div class="notfoundContent">
@@ -92,20 +121,24 @@
                             </div>
                         </a>
                     {% endif %}
-                    <p class="subName">/{% if type == 'user' %}u{% else %}r{% endif %}/{% if page %}{{ page.name }}{% else %}404{% endif %}</p>
+                    {% if type != 'login' %}<p class="subName">/{% if type == 'user' %}u{% else %}r{% endif %}/{% if page %}{{ page.name }}{% else %}404{% endif %}</p>{% endif %}
                     <div class="sidebarContent">
+                        {% if page %}
                         {{ page.sidebar }}
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <script>
+        {% if page %}
         var primary = "{{ page.primary }}";
         var secondary = "{{ page.secondary }}";
         if (primary && secondary) {
             document.getElementsByClassName('background')[0].style.background = "linear-gradient(90deg, "+secondary+", "+primary+")"
         }
+        {% endif %}
     </script>
 </body>
 
