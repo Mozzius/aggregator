@@ -133,8 +133,8 @@
     </div>
     <script>
         {% if page %}
-        var primary = "{{ page.primary }}";
-        var secondary = "{{ page.secondary }}";
+        var primary = "{{ page.primary }}" || '#'+Math.floor(Math.random()*16777215).toString(16);;
+        var secondary = "{{ page.secondary }}" || '#'+Math.floor(Math.random()*16777215).toString(16);;
         if (primary && secondary) {
             document.getElementsByClassName('background')[0].style.background = "linear-gradient(90deg, "+secondary+", "+primary+")"
         }

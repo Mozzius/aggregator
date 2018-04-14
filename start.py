@@ -35,18 +35,7 @@ def loadUser(userid):
 @app.route('/r/<subname>/<sort>')
 def sub(subname='frontpage',sort='hot'):
     page = db.getSub(subname)
-    if sort == 'hot':
-        posts = db.hot(subname)
-    elif sort == 'new':
-        posts = db.new(subname)
-    elif sort == 'top':
-        posts = db.top(subname)
-    elif sort == 'top':
-        posts = db.top(subname)
-    elif sort == 'controversial':
-        posts = db.controversial(subname)
-    else:
-        posts = False
+    posts = db.getPosts(subname,sort)
     return render_template('roddit.html',page=page,posts=posts,type='sub',user={'name':'mozzius'})
 
 @app.route('/r/<subname>/submit')

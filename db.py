@@ -13,24 +13,19 @@ def addPost(post):
     posts.insert_one(post)
     print('Added post:',post.title)
 
-def getPosts(sub):
+def getPosts(sub,sort):
     if sub == 'all':
-        return posts.find()
+        subPosts = posts.find()
     else:
-        return posts.find({'sub':sub})
-
-def hot(sub):
-    # TODO: Sorting algorithm
-    return list(getPosts(sub))
-
-def new(sub):
-    return list(getPosts(sub).sort('date',pymongo.DESCENDING))
-
-def top(sub):
-    return list(getPosts(sub).sort('score',pymongo.DESCENDING))
-
-def controversial(sub):
-    return list(getPosts(sub).sort('score',pymongo.ASCENDING))
+        subPosts = posts.find({'sub':sub})
+    if sort == 'hot':
+        return list(subPosts)
+    elif sort == 'new':
+        return list(subPosts.sort('date',pymongo.DESCENDING))
+    elif sort == 'top':
+        return list(subPosts.sort('score',pymongo.DESCENDING))
+    elif sort == 'controversial':
+        return list(subPosts.sort('score',pymongo.ASCENDING))
 
 def getSub(name):
     return subs.find_one({'name':name})
