@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for, redirect, session, request
-from flask_login import LoginManager, login_user, login_required, current_user, logout_user
+from flask_login import LoginManager, login_user, login_required, current_user, logout_user, UserMixin
 import hashlib
 import db
 
@@ -9,21 +9,14 @@ login = LoginManager(app)
 def sha256(msg):
     return hashlib.sha256(msg).digest()
 
-class User():
-    def __init__(self,username):
-        self.username = username
-    
-    def is_authenticated(self):
-        return True
+class User(UserMixin):
+    def __init__(self,name,id,active=True):
+        self.name = name
+        self.id = id
+        self.active = active
 
     def is_active(self):
-        return True
-
-    def is_anonymous(self):
-        return False
-
-    def get_id(self):
-        return self.username
+        return self.active
 
     @staticmethod
     def validate_login(pw_hash, password):

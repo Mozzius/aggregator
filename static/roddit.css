@@ -1,9 +1,9 @@
-@import url('https://fonts.googleapis.com/css?family=Lato');
+@import url('https://fonts.googleapis.com/css?family=Roboto|Roboto+Mono');
 
 * {
     margin: 0;
     box-sizing: border-box;
-    font-family: 'Lato', sans-serif;
+    font-family: 'Roboto', sans-serif;
     transition: background-color 0.2s ease;
 }
 
@@ -193,6 +193,7 @@ a {
     font-size: 30px;
     text-align: center;
     padding: 15px 0;
+    font-variant: small-caps;
 }
 
 .post {
@@ -234,6 +235,10 @@ a {
     margin: 5px 0 10px;
     font-size: 14px;
     color: #626262;
+}
+
+.postSub > a {
+    font-variant: small-caps;
 }
 
 .voting {
