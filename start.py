@@ -1,16 +1,10 @@
 from flask import Flask, render_template, url_for, redirect, session, request
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user, UserMixin
-from os import path
 import hashlib
 import db
 
 app = Flask(__name__)
 login = LoginManager(app)
-
-basepath = path.dirname(__file__)
-filepath = path.abspath(path.join(basepath, "..", "pwd.txt"))
-with open(filepath,'r') as o:
-    app.secret_key = o.readline()
 
 def sha256(msg):
     return hashlib.sha256(msg.encode('utf-8')).digest()
@@ -113,4 +107,5 @@ def user(user):
     return render_template('roddit.html',page=user,posts=posts,type='user')
 
 if __name__ == '__main__':
+    app.secret_key = 'localhost'
     app.run(port=80,debug=True,host='0.0.0.0')
