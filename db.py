@@ -1,5 +1,4 @@
 import pymongo
-import bleach
 import re
 import hashlib
 
@@ -40,7 +39,8 @@ def getUser(name,prop='name'):
     return users.find_one({prop:name})
 
 def addUser(name,email,password):
-    name = bleach.clean(name).strip()
+    # need to get bleach working
+    name = name.strip()
     match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', email)
     password = sha256(password)
     if match == None and users.find({'email':email}).count() == 0:
