@@ -1,12 +1,15 @@
 from flask import Flask, render_template, url_for, redirect, session, request
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user, UserMixin
+from os import path
 import hashlib
 import db
 
 app = Flask(__name__)
 login = LoginManager(app)
 
-with open('../pwd.txt') as o:
+basepath = path.dirname(__file__)
+filepath = path.abspath(path.join(basepath, "..", "pwd.txt"))
+with open(filepath,'r') as o:
     app.secret_key = o.readline()
 
 def sha256(msg):
