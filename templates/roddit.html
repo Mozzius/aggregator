@@ -76,7 +76,7 @@
                                 Sign up to Roddit
                             </div>
                             {% if fail %}
-                            <div class="fail">Your </div>
+                            <div class="fail">Something in this form is wrong :(</div>
                             {% endif %}
                             <form action="signup" method="POST">
                                 <p>Username:</p>
@@ -93,6 +93,9 @@
                             <div class="formTitle">
                                 Log in to Roddit
                             </div>
+                            {% if fail %}
+                            <div class="fail">Something in this form is wrong :(</div>
+                            {% endif %}
                             <form action="login" method="POST">
                                 <p>Email:</p>
                                 <input type="email" name="email"><br>

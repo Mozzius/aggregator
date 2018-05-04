@@ -74,11 +74,9 @@ def login():
 
 @app.route('/signup',methods=['GET','POST'])
 def signup():
-    # doesn't work in the slightest
     if request.method == 'POST':
         form = request.form
-        success = db.addUser(form['username'],form['email'],form['password'])
-        if success:
+        if db.addUser(form['username'],form['email'],form['password']):
             session['loggedin'] = True
             session['name'] = form['name']
             session['email'] = form['email']
