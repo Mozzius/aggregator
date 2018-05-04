@@ -2,9 +2,6 @@ import pymongo
 import re
 import hashlib
 
-with open('../pwd.txt') as o:
-    key = o.readline()
-
 client = pymongo.MongoClient('localhost', 27017)
 
 posts = client.roddit.posts
