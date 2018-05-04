@@ -90,12 +90,14 @@ a {
 
 .mainContent {
     background-color: #fff;
-    box-shadow: 0 0 4px #333;
+    box-shadow: 0 0 2px #333;
     border-radius: 15px 15px 0 0;
     width: 100%;
     min-height: calc(100vh - 150px);
     overflow: hidden;
     position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
 .left {
@@ -108,6 +110,7 @@ a {
 .leftInner {
     background-color: #fff;
     min-height: calc(100vh - 165px);
+    box-shadow: 0 0 2px #000;
 }
 
 .toggle {
@@ -162,6 +165,7 @@ a {
     float: left;
     width: 300px;
     min-height: calc(100vh - 165px);
+    box-shadow: 0 0 2px #000;
 }
 
 .subPost {
@@ -267,6 +271,7 @@ a {
 
 .form {
     padding: 10px;
+    margin: 10px auto;
 }
 
 .formTitle {

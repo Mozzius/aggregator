@@ -6,8 +6,11 @@ import db
 app = Flask(__name__)
 login = LoginManager(app)
 
+with open('../pwd.txt') as o:
+    app.secret_key = o.readline()
+
 def sha256(msg):
-    return hashlib.sha256(msg).digest()
+    return hashlib.sha256(msg.encode('utf-8')).digest()
 
 class User(UserMixin):
     def __init__(self,name,id,active=True):
@@ -36,7 +39,7 @@ def loadUser(userid):
 def sub(subname='frontpage',sort='hot'):
     page = db.getSub(subname)
     posts = db.getPosts(subname,sort)
-    return render_template('roddit.html',page=page,posts=posts,type='sub',user={'name':'mozzius'})
+    return render_template('roddit.html',page=page,posts=posts,type='sub')
 
 @app.route('/r/<subname>/submit')
 @login_required
@@ -58,10 +61,11 @@ def unauthHandler():
 def login():
     if request.method == 'POST':
         form = request.form
-        if db.checkLogin(form['email'],form['password']):
+        if db.verifyUser(form['email'],form['password']):
+            user = db.getUser(form['email'],'email')
             session['loggedin'] = True
-            session['name'] = db.user['name']
-            session['email'] = db.user['email']
+            session['name'] = user['name']
+            session['email'] = user['email']
             return redirect('/')
         else:
             return render_template('roddit.html',type='login',fail=True)
@@ -76,11 +80,11 @@ def signup():
     # doesn't work in the slightest
     if request.method == 'POST':
         form = request.form
-        success = db.addUser(form)
+        success = db.addUser(form['username'],form['email'],form['password'])
         if success:
             session['loggedin'] = True
-            session['name'] = db.user['name']
-            session['email'] = db.user['email']
+            session['name'] = form['name']
+            session['email'] = form['email']
             return redirect('/')
         else:
             return render_template('roddit.html',type='signup',fail=True)
@@ -92,7 +96,9 @@ def signup():
 
 @app.route('/logout')
 def logout():
-    flask_login.logout_user()
+    session['loggedin'] = False
+    session['name'] = ''
+    session['email'] = ''
     return redirect('/')
 
 @app.route('/u/<user>')

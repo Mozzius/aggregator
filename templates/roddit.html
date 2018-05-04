@@ -16,8 +16,8 @@
                 <a href="/">Roddit</a>
             </div>
             <div class="topRight">
-                {% if is_authenticated %}
-                Welcome back, <a href="/u/{{ user.name }}">{{ user.name }}</a>! (<a href="/logout">log out</a>)
+                {% if session.loggedin %}
+                Welcome back, <a href="/u/{{ session.name }}">{{ session.name }}</a>! (<a href="/logout">log out</a>)
                 {% else %}
                 <a href="/login">Log in</a> / <a href="/signup">Sign up</a>
                 {% endif %}
@@ -73,7 +73,7 @@
                     {% elif type == 'signup' %}
                     <div class="form">
                             <div class="formTitle">
-                                Log in to Roddit
+                                Sign up to Roddit
                             </div>
                             {% if fail %}
                             <div class="fail">Your </div>
