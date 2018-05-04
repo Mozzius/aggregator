@@ -4,41 +4,103 @@
 <head>
     <title>Roddit</title>
     <link rel="stylesheet" href="/static/roddit.css">
+    <script src="/static/voting.js"></script>
+    <script defer src="/static/index.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js" integrity="sha384-SlE991lGASHoBfWbelyBPLsUlwY1GwNDJo3jSJO04KZ33K2bwfV9YBauFfnzvynJ" crossorigin="anonymous"></script>
 </head>
 
 <body>
     <div class="background">
+        <div class="top">
+            <div class="topLeft">
+                <a href="/">Roddit</a>
+            </div>
+            <div class="topRight">
+                {% if is_authenticated %}
+                Welcome back, <a href="/u/{{ user.name }}">{{ user.name }}</a>! (<a href="/logout">log out</a>)
+                {% else %}
+                <a href="/login">Log in</a> / <a href="/signup">Sign up</a>
+                {% endif %}
+            </div>
+        </div>
         <div class="container">
             <div class="left">
-                {% if subName == 'frontpage' %}
-                <div class="leftItem active"><i class="fa fa-home"></i>&nbsp;&nbsp; Frontpage</div>
-                {% else %}
-                <div class="leftItem"><i class="fa fa-house"></i>&nbsp;&nbsp; Frontpage</div>
-                {% endif %}
-                <div class="leftItem"><i class="fa fa-globe"></i>&nbsp;&nbsp; All</div>
-                <div class="leftItem"><i class="fa fa-rss"></i>&nbsp;&nbsp; Subscriptions</div>
-                <div class="voting"></div>
+                <div class="toggle" onclick="toggleLeft()">
+                    <i class="fa fa-caret-right" id="toggleleft"></i>
+                </div>
+                <div class="leftInner">
+                    <a href="/"><div class="leftItem {% if page and page.name == 'frontpage' %}active{% endif %}"><i class="fa fa-home"></i>&nbsp;&nbsp;&nbsp; Frontpage</div></a>
+                    <a href="/r/all"><div class="leftItem {% if page and page.name == 'all' %}active{% endif %}"><i class="fa fa-globe"></i>&nbsp;&nbsp;&nbsp; All</div></a>
+                    <!-- <div class="leftItem {% if page and page == 'subscriptions' %}active{% endif %}"><i class="fa fa-rss"></i>&nbsp;&nbsp; Subscriptions</div> -->
+                </div>
             </div>
             <div class="main">
                 <div class="mainTop">
-                    <p>Hot</p>
-                    <p>New</p>
-                    <p>Rising</p>
-                    <p>Controversial</p>
-                    <p>Top</p>
+                    {% if page and type == 'sub' %}
+                    <a href="/r/{{ page.name }}/hot"><p>Hot</p></a>
+                    <a href="/r/{{ page.name }}/new"><p>New</p></a>
+                    <a href="/r/{{ page.name }}/top"><p>Top</p></a>
+                    <a href="/r/{{ page.name }}/controversial"><p>Controversial</p></a>
+                    {% endif %}
                 </div>
                 <div class="mainContent">
-                    {% if posts %}
+                    {% if posts and page %}
                         {% for post in posts %}
                         <div class="post">
-                            <img class="thumbnail" src="{{ post.thumbnail }}" alt="thumbnail" />
+                            <div class="voting" id="{{ post._id }}">
+                                <i class="fa fa-caret-up"></i>
+                                <p>{{ post.score }}</p>
+                                <i class="fa fa-caret-down"></i>
+                                <script defer>addPost('{{ post._id }}')</script>
+                            </div>
+                            <a href="{{ post.link }}">
+                                <img class="thumbnail" src="{{ post.thumbnail }}" alt="thumbnail" />
+                            </a>
                             <div class="postInner">
-                                <span class="postTitle">{{ post.title }}</span>
-                                <p class="postSub"><a>{{ post.comments }} comments</a> &middot; submitted by <a>/u/{{ post.user }}</a> to <a>/r/{{ post.sub }}</a></p>
+                                <a href="{{ post.link }}">
+                                    <span class="postTitle">{{ post.title }}</span>
+                                </a>
+                                <p class="postSub"><a href="/r/{{ post.sub }}/post/{{ post._id }}">{{ post.comments }} comments</a> &middot; submitted by <a href="/u/{{ post.user_name }}">/u/{{ post.user_name }}</a> to <a href="/r/{{ post.sub }}">/r/{{ post.sub }}</a></p>
                             </div>
                         </div>
                         {% endfor %}
+                    {% elif type == 'submit' %}
+                        <div class="formTitle">
+                            Submit a post to /r/{{ page.name }}
+                        </div>
+                        this doesn't work yet
+                        <form action="submit"></form>
+                    {% elif type == 'signup' %}
+                    <div class="form">
+                            <div class="formTitle">
+                                Log in to Roddit
+                            </div>
+                            {% if fail %}
+                            <div class="fail">Your </div>
+                            {% endif %}
+                            <form action="signup" method="POST">
+                                <p>Username:</p>
+                                <input type="text" name="username"><br>
+                                <p>Email:</p>
+                                <input type="email" name="email"><br>
+                                <p>Password</p>
+                                <input type="password" name="password"><br>
+                                <input type="submit" value="Sign up">
+                            </form>
+                        </div>
+                    {% elif type == 'login' %}
+                        <div class="form">
+                            <div class="formTitle">
+                                Log in to Roddit
+                            </div>
+                            <form action="login" method="POST">
+                                <p>Email:</p>
+                                <input type="email" name="email"><br>
+                                <p>Password</p>
+                                <input type="password" name="password"><br>
+                                <input type="submit" value="Log in">
+                            </form>
+                        </div>
                     {% else %}
                         <div class="notfound">
                             <div class="notfoundContent">
@@ -52,18 +114,32 @@
             <div class="right">
                 <div class="search"><i class="fa fa-search"></i>&nbsp; Search</div>
                 <div class="sidebar">
-                    <div class="subPost">
-                        <div class="subPostInner">Post Something</div>
+                    {% if page and type == 'sub' %}
+                        <a href="/r/{{ page.name }}/submit">
+                            <div class="subPost">
+                                <div class="subPostInner">Post Something</div>
+                            </div>
+                        </a>
+                    {% endif %}
+                    {% if type != 'login' %}<p class="subName">/{% if type == 'user' %}u{% else %}r{% endif %}/{% if page %}{{ page.name }}{% else %}404{% endif %}</p>{% endif %}
+                    <div class="sidebarContent">
+                        {% if page %}
+                        {{ page.sidebar }}
+                        {% endif %}
                     </div>
-                    <p class="subName">/r/{{ subName }}</p>
-                    <ul>
-                        <li><b>Rule 1:</b> Be nice</li>
-                        <li><b>Rule 2:</b> Don't be not nice</li>
-                    </ul>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        {% if page %}
+        var primary = "{{ page.primary }}" || '#'+Math.floor(Math.random()*16777215).toString(16);;
+        var secondary = "{{ page.secondary }}" || '#'+Math.floor(Math.random()*16777215).toString(16);;
+        if (primary && secondary) {
+            document.getElementsByClassName('background')[0].style.background = "linear-gradient(90deg, "+secondary+", "+primary+")"
+        }
+        {% endif %}
+    </script>
 </body>
 
 </html>
