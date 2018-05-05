@@ -197,6 +197,7 @@ a {
     font-size: 30px;
     text-align: center;
     padding: 15px 0;
+    text-transform: lowercase;
     font-variant: small-caps;
 }
 
