@@ -169,7 +169,7 @@ a {
     padding: 10px;
 }
 
-.subPost {
+.submitPost {
     width: 100%;
     margin-top: 10px;
     height: 55px;
@@ -179,12 +179,12 @@ a {
     transition: all 0.2s ease;
 }
 
-.subPost:hover {
-    margin-top: 25px;
+.submitPost:hover {
+    margin-top: 15px;
     height: 50px;
 }
 
-.subPostInner {
+.submitPostInner {
     text-align: center;
     background-color: #1395ff;
     border-radius: 5px;
