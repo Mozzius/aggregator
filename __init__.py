@@ -1,2 +1,2 @@
 #!/usr/bin/env python3
-from app import start
+import start
