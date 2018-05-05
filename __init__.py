@@ -1,1 +1,1 @@
-import start
+from app import start
