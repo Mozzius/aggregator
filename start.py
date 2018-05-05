@@ -2,7 +2,11 @@
 from flask import Flask, render_template, url_for, redirect, session, request
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user, UserMixin
 import hashlib
-import db
+
+if __name__ == '__main__':
+    import db
+else:
+    from app import db
 
 app = Flask(__name__)
 login = LoginManager(app)
