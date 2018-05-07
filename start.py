@@ -4,6 +4,10 @@ from flask_login import LoginManager, login_user, login_required, current_user, 
 import hashlib
 import db
 
+# PROBLEMS:
+# flask-login doesn't work
+# @login_required redirects to /
+
 app = Flask(__name__)
 login = LoginManager(app)
 
@@ -13,7 +17,7 @@ def sha256(msg):
 class User(UserMixin):
     def __init__(self,name,id,active=True):
         self.name = name
-        self.id = id
+        self.email = id
         self.active = active
 
     def is_active(self):
@@ -27,7 +31,7 @@ class User(UserMixin):
 def loadUser(userid):
     user = db.getUser(userid,'_id')
     if user:
-        return User(userid)
+        return User(user['name'],userid)
     else:
         return None
 
@@ -57,16 +61,15 @@ def submit(subname):
 @app.route('/createsub',methods=['GET','POST'])
 @login_required
 def createsub():
-    page = db.getSub(subname)
     if request.method == 'POST':
         sub = request.form
         fail = db.createSub(sub)
         if fail:
-            return render_template('roddit.html',page=page,type='makesub',fail=True)
+            return render_template('roddit.html',type='makesub',fail=True)
         else:
             return redirect('/'+sub['sub'])
     else:
-        return render_template('roddit.html',page=page,type='makesub',fail=False)
+        return render_template('roddit.html',type='makesub',fail=False)
 
 @login.unauthorized_handler
 def unauthHandler():
