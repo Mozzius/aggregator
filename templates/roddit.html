@@ -13,13 +13,13 @@
     <div class="background">
         <div class="top">
             <div class="topLeft">
-                <a href="/">Roddit</a>
+                <a class="linkWhite" href="/">Roddit</a>
             </div>
             <div class="topRight">
                 {% if session.loggedin %}
-                Welcome back, <a href="/u/{{ session.name }}">{{ session.name }}</a>! (<a href="/logout">log out</a>)
+                Welcome back, <a class="linkWhite" href="/u/{{ session.name }}">{{ session.name }}</a>! (<a class="linkWhite" href="/logout">log out</a>)
                 {% else %}
-                <a href="/login">Log in</a> / <a href="/signup">Sign up</a>
+                <a class="linkWhite" href="/login">Log in</a> / <a class="linkWhite" href="/signup">Sign up</a>
                 {% endif %}
             </div>
         </div>
@@ -71,7 +71,7 @@
                         this doesn't work yet
                         <form action="submit"></form>
                     {% elif type == 'signup' %}
-                    <div class="form">
+                        <div class="form">
                             <div class="formTitle">
                                 Sign up to Roddit
                             </div>
@@ -79,12 +79,12 @@
                             <div class="fail">Something in this form is wrong :(</div>
                             {% endif %}
                             <form action="signup" method="POST">
-                                <p>Username:</p>
-                                <input type="text" name="username"><br>
-                                <p>Email:</p>
-                                <input type="email" name="email"><br>
-                                <p>Password</p>
-                                <input type="password" name="password"><br>
+                                <p><span class="red">*</span>Username:</p>
+                                <input required type="text" name="username"><br>
+                                <p><span class="red">*</span>Email:</p>
+                                <input required type="email" name="email"><br>
+                                <p><span class="red">*</span>Password:</p>
+                                <input required type="password" name="password"><br>
                                 <input type="submit" value="Sign up">
                             </form>
                         </div>
@@ -97,11 +97,49 @@
                             <div class="fail">Something in this form is wrong :(</div>
                             {% endif %}
                             <form action="login" method="POST">
-                                <p>Email:</p>
-                                <input type="email" name="email"><br>
-                                <p>Password</p>
-                                <input type="password" name="password"><br>
+                                <p><span class="red">*</span>Email:</p>
+                                <input required type="email" name="email"><br>
+                                <p><span class="red">*</span>Password:</p>
+                                <input required type="password" name="password"><br>
                                 <input type="submit" value="Log in">
+                            </form>
+                        </div>
+                    {% elif type == 'submit' %}
+                        <div class="form">
+                            <div class="formTitle">
+                                Make a post to {{ sub }}
+                            </div>
+                            {% if fail %}
+                            <div class="fail">Something in this form is wrong :(</div>
+                            {% endif %}
+                            <form action="signup" method="POST">
+                                <p><span class="red">*</span>Post title:</p>
+                                <input required type="text" name="title"><br>
+                                <p>Link (optional):</p>
+                                <input type="text" name="link"><br>
+                                <p>Text (optional):</p>
+                                <textarea name="text"><br>
+                                <input type="submit" value="Post!">
+                            </form>
+                        </div>
+                    {% elif type == 'makesub' %}
+                        <div class="form">
+                            <div class="formTitle">
+                                Create a sub!
+                            </div>
+                            {% if fail %}
+                            <div class="fail">Something in this form is wrong :(</div>
+                            {% endif %}
+                            <form action="signup" method="POST">
+                                <p><span class="red">*</span>Sub name:</p>
+                                <input required type="text" name="name"><br>
+                                <p><span class="red">*</span>Sidebar text:</p>
+                                <input required type="text" name="link"><br>
+                                <p>Primary Colour (optional:</p>
+                                <input type="color" name="primary"><br>
+                                <p>Secondary Colour (optional):</p>
+                                <input type="color" name="secondary"><br>
+                                <input type="submit" value="Post!">
                             </form>
                         </div>
                     {% else %}
@@ -124,6 +162,7 @@
                             </div>
                         </a>
                     {% endif %}
+                    <a class="linkBlue createSub" href="/createsub">{% if page and type == 'sub' %}or {% endif %}create a sub</a>
                     {% if type != 'login' %}<p class="subName">/{% if type == 'user' %}u{% else %}r{% endif %}/{% if page %}{{ page.name }}{% else %}404{% endif %}</p>{% endif %}
                     <div class="sidebarContent">
                         {% if page %}

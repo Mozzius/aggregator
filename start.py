@@ -37,11 +37,14 @@ def loadUser(userid):
 def sub(subname='frontpage',sort='hot'):
     page = db.getSub(subname)
     posts = db.getPosts(subname,sort)
+    newposts = posts
+    for i in range(len(posts)):
+        newposts[i]['user_name'] = db.getUser(posts[i]['user_id'],'_id')['name']
     return render_template('roddit.html',page=page,posts=posts,type='sub')
 
-@app.route('/r/<subname>/submit')
+@app.route('/r/<subname>/submit',methods=['GET','POST'])
 @login_required
-def submit(subname,methods=['GET','POST']):
+def submit(subname):
     page = db.getSub(subname)
     if request.method == 'POST':
         post = request.form
@@ -50,6 +53,20 @@ def submit(subname,methods=['GET','POST']):
             return render_template('roddit.html',page=page,type='submit',fail=True)
     else:
         return render_template('roddit.html',page=page,type='submit',fail=False)
+
+@app.route('/createsub',methods=['GET','POST'])
+@login_required
+def createsub():
+    page = db.getSub(subname)
+    if request.method == 'POST':
+        sub = request.form
+        fail = db.createSub(sub)
+        if fail:
+            return render_template('roddit.html',page=page,type='makesub',fail=True)
+        else:
+            return redirect('/'+sub['sub'])
+    else:
+        return render_template('roddit.html',page=page,type='makesub',fail=False)
 
 @login.unauthorized_handler
 def unauthHandler():

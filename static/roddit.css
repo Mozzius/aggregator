@@ -35,6 +35,10 @@ a {
     padding: 5px;
 }
 
+.topLeft {
+    margin-left: 2px;
+}
+
 .topLeft > a {
     float: left;
     color: #fff;
@@ -52,12 +56,26 @@ a {
     transition: background-color 0.2s ease;
 }
 
-.topRight > a:hover {
+.linkWhite .linkBlue {
+    transition: background-color 0.2s ease;
+}
+
+.linkWhite:hover {
+    border-radius: 3px;
     color: #1395ff;
     background-color: #fff;
     padding: 0 2px;
     margin: 0 -2px;
 }
+
+.linkBlue:hover {
+    border-radius: 3px;
+    color: #fff;
+    background-color: #1395ff;
+    padding: 0 2px;
+    margin: 0 -2px;
+}
+
 
 .container {
     width: 100%;
@@ -167,6 +185,13 @@ a {
     min-height: calc(100vh - 165px);
     box-shadow: 0 0 2px #000;
     padding: 10px;
+}
+
+.createSub {
+    left: calc(50% - 50px);
+    position: relative;
+    width: 100px;
+    top: 5px;
 }
 
 .submitPost {
@@ -314,4 +339,8 @@ svg.downvoted {
 
 .reported, reported:hover {
     border-left: 5px solid #b80404;
+}
+
+.red {
+    color: red;
 }

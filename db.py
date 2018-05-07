@@ -2,6 +2,7 @@
 import pymongo
 import re
 import hashlib
+import datetime
 
 client = pymongo.MongoClient('localhost', 27017)
 
@@ -46,6 +47,9 @@ def addUser(name,email,password):
     else:
         users.insert_one({'name':name,'email':email,'password':password})
         return True
+
+def addPost(uid,title,link,sub,text=''):
+    posts.insert_one({'title':title,'link':link,'score':10,'user_id':uid,'text':text,'date':datetime.datetime.utcnow()})
 
 def verifyUser(email,password):
     user = users.find_one({'email':email})
