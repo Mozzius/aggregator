@@ -2,7 +2,7 @@
 from flask import Flask, render_template, url_for, redirect, session, request
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user, UserMixin
 import hashlib
-import aggregator.db
+import aggregator.db as db
 
 # PROBLEMS:
 # flask-login doesn't work
