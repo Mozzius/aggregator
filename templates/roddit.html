@@ -101,7 +101,7 @@
                     {% elif type == 'submit' %}
                         <div class="form">
                             <div class="formTitle">
-                                Make a post to {{ sub }}
+                                Make a post to /r/{{ sub }}
                             </div>
                             {% if fail %}
                             <div class="fail">Something in this form is wrong :(</div>
@@ -112,7 +112,7 @@
                                 <p>Link (optional):</p>
                                 <input type="text" name="link"><br>
                                 <p>Text (optional):</p>
-                                <textarea name="text"><br>
+                                <textarea name="text"></textarea><br>
                                 <input type="submit" value="Post!">
                             </form>
                         </div>
