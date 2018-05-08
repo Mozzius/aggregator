@@ -341,6 +341,6 @@ svg.downvoted {
     border-left: 5px solid #b80404;
 }
 
-.red {
+.red, .fail {
     color: red;
 }
