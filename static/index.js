@@ -4,7 +4,7 @@ window.onresize = autoToggle
 
 function autoToggle() {
     var left = document.getElementsByClassName('left')[0]
-    if (window.innerWidth < 1200 && left.offsetWidth === 300 || window.innerWidth > 1200 && left.offsetWidth === 50) {
+    if (window.innerWidth < 1200 && !left.classList.contains('mini') || window.innerWidth > 1200 && left.classList.contains('mini')) {
         toggleLeft()
     }
 }
