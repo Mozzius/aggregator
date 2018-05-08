@@ -52,8 +52,8 @@ def load_user(userid):
 @app.route('/r/<subname>')
 @app.route('/r/<subname>/<sort>')
 def sub(subname='frontpage',sort='hot'):
-    page = db.getSub(subname)
-    posts = db.getPosts(subname,sort)
+    page = db.getSub(subname.lower())
+    posts = db.getPosts(subname.lower(),sort)
     newposts = posts
     for i in range(len(posts)):
         newposts[i]['user_name'] = db.getUser(posts[i]['user_id'],'_id')['name']
@@ -62,7 +62,7 @@ def sub(subname='frontpage',sort='hot'):
 @app.route('/r/<subname>/submit',methods=['GET','POST'])
 @login_required
 def submit(subname):
-    page = db.getSub(subname)
+    page = db.getSub(subname.lower())
     if request.method == 'POST':
         form = request.form
         fail = db.addPost(current_user.get_id(),form['title'],form['link'],form['sub'],form['text'])
@@ -75,8 +75,8 @@ def submit(subname):
 @login_required
 def createsub():
     if request.method == 'POST':
-        sub = request.form
-        fail = db.createSub(sub)
+        form = request.form
+        fail = db.createSub(current_user.id,form['name'],form['sidebar'],form['primary'],form['secondary'])
         if fail:
             return render_template('roddit.html',type='makesub',fail=True)
         else:
