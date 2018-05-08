@@ -16,8 +16,8 @@
                 <a class="linkWhite" href="/">Roddit</a>
             </div>
             <div class="topRight">
-                {% if session.loggedin %}
-                Welcome back, <a class="linkWhite" href="/u/{{ session.name }}">{{ session.name }}</a>! (<a class="linkWhite" href="/logout">log out</a>)
+                {% if current_user.is_authenticated() %}
+                Welcome back, <a class="linkWhite" href="/u/{{ current_user.name }}">{{ current_user.name }}</a>! (<a class="linkWhite" href="/logout">log out</a>)
                 {% else %}
                 <a class="linkWhite" href="/login">Log in</a> / <a class="linkWhite" href="/signup">Sign up</a>
                 {% endif %}

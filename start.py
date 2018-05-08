@@ -2,6 +2,8 @@
 from flask import Flask, render_template, url_for, redirect, session, request
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user, UserMixin
 import hashlib
+from bson import ObjectId
+
 try:
     import db
 except ImportError:
@@ -17,24 +19,29 @@ login = LoginManager(app)
 def sha256(msg):
     return hashlib.sha256(msg.encode('utf-8')).digest()
 
-class User(UserMixin):
-    def __init__(self,name,_id,active=True):
-        self.name = name
-        self.id = _id
-        self.active = active
+class User():
+    def __init__(self,user):
+        self.name = user['name']
+        self.id = str(user['_id'])
+        self.email = user['email']
+
+    def is_authenticated(self):
+        return True
 
     def is_active(self):
-        return self.active
+        return True
+    
+    def is_anonymous(self):
+        return False
 
-    @staticmethod
-    def validate_login(pw_hash, password):
-        return pw_hash == sha256(password)
+    def get_id(self):
+        return self.id
 
 @login.user_loader
-def loadUser(userid):
-    user = db.getUser(userid,'_id')
+def load_user(userid):
+    user = db.getUser(ObjectId(userid),'_id')
     if user:
-        return User(user['name'],userid)
+        return User(user)
     else:
         return None
 
@@ -84,14 +91,12 @@ def login():
         form = request.form
         if db.verifyUser(form['email'],form['password']):
             user = db.getUser(form['email'],'email')
-            session['loggedin'] = True
-            session['name'] = user['name']
-            session['email'] = user['email']
+            login_user(User(user))
             return redirect('/')
         else:
             return render_template('roddit.html',type='login',fail=True)
     else:
-        if 'loggedin' in session and session['loggedin'] == True:
+        if current_user.is_authenticated():
             return redirect('/')
         else:
             return render_template('roddit.html',type='login',fail=False)
@@ -101,23 +106,20 @@ def signup():
     if request.method == 'POST':
         form = request.form
         if db.addUser(form['username'],form['email'],form['password']):
-            session['loggedin'] = True
-            session['name'] = form['name']
-            session['email'] = form['email']
+            user = db.getUser(form['email'],'email')
+            login_user(User(user))
             return redirect('/')
         else:
             return render_template('roddit.html',type='signup',fail=True)
     else:
-        if 'loggedin' in session and session['loggedin'] == True:
+        if current_user.is_authenticated():
             return redirect('/')
         else:
             return render_template('roddit.html',type='signup',fail=False)
 
 @app.route('/logout')
 def logout():
-    session['loggedin'] = False
-    session['name'] = ''
-    session['email'] = ''
+    logout_user()
     return redirect('/')
 
 @app.route('/u/<user>')
