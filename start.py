@@ -61,8 +61,8 @@ def sub(subname='frontpage',sort='hot'):
 def submit(subname):
     page = db.getSub(subname)
     if request.method == 'POST':
-        post = request.form
-        fail = db.addPost(post)
+        form = request.form
+        fail = db.addPost(current_user.get_id(),form['title'],form['link'],form['sub'],form['text'])
         if fail:
             return render_template('roddit.html',page=page,type='submit',fail=True)
     else:
@@ -84,6 +84,11 @@ def createsub():
 @login.unauthorized_handler
 def unauthHandler():
     return redirect(url_for('login'))
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect('/')
 
 @app.route('/login',methods=['GET','POST'])
 def login():
@@ -116,11 +121,6 @@ def signup():
             return redirect('/')
         else:
             return render_template('roddit.html',type='signup',fail=False)
-
-@app.route('/logout')
-def logout():
-    logout_user()
-    return redirect('/')
 
 @app.route('/u/<user>')
 def user(user):

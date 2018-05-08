@@ -49,7 +49,11 @@ def addUser(name,email,password):
         return True
 
 def addPost(uid,title,link,sub,text=''):
-    posts.insert_one({'title':title,'link':link,'score':10,'user_id':uid,'text':text,'date':datetime.datetime.utcnow()})
+    try:
+        posts.insert_one({'title':title,'link':link,'score':10,'user_id':uid,'text':text,'date':datetime.datetime.utcnow()})
+        return True
+    except:
+        return False
 
 def verifyUser(email,password):
     user = users.find_one({'email':email})
@@ -57,7 +61,6 @@ def verifyUser(email,password):
         return True
     else:
         return False
-
 
 def getUserPosts(id):
     return list(posts.find({'user_id':id}).sort('date',pymongo.DESCENDING))
