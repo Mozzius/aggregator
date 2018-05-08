@@ -36,8 +36,7 @@ class User():
     @property
     def is_anonymous(self):
         return False
-
-    @property
+        
     def get_id(self):
         return self.id
 
