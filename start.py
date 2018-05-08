@@ -36,7 +36,7 @@ class User():
     @property
     def is_anonymous(self):
         return False
-        
+
     def get_id(self):
         return self.id
 
@@ -104,7 +104,7 @@ def login():
         else:
             return render_template('roddit.html',type='login',fail=True)
     else:
-        if current_user.is_authenticated():
+        if current_user.is_authenticated:
             return redirect('/')
         else:
             return render_template('roddit.html',type='login',fail=False)
@@ -120,7 +120,7 @@ def signup():
         else:
             return render_template('roddit.html',type='signup',fail=True)
     else:
-        if current_user.is_authenticated():
+        if current_user.is_authenticated:
             return redirect('/')
         else:
             return render_template('roddit.html',type='signup',fail=False)
