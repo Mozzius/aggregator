@@ -60,7 +60,7 @@
                                 <a href="{{ post.link }}">
                                     <span class="postTitle">{{ post.title }}</span>
                                 </a>
-                                <p class="postSub"><a href="/r/{{ post.sub }}/post/{{ post._id }}">{{ post.comments }} comments</a> &middot; submitted by <a href="/u/{{ post.user_name }}">/u/{{ post.user_name }}</a> to <a href="/r/{{ post.sub }}">/r/{{ post.sub }}</a></p>
+                                <p class="postSub"><a href="/r/{{ post.sub_name }}/post/{{ post._id }}">{{ post.comments }} comments</a> &middot; submitted by <a href="/u/{{ post.user_name }}">/u/{{ post.user_name }}</a> to <a href="/r/{{ post.sub_name }}">/r/{{ post.sub_name }}</a></p>
                             </div>
                         </div>
                         {% endfor %}
@@ -128,7 +128,7 @@
                                 <p><span class="red">*</span>Sub name:</p>
                                 <input required type="text" name="name"><br>
                                 <p><span class="red">*</span>Sidebar text:</p>
-                                <input required type="text" name="link"><br>
+                                <input required type="text" name="sidebar"><br>
                                 <p>Primary Colour (optional):</p>
                                 <input type="color" name="primary"><br>
                                 <p>Secondary Colour (optional):</p>
@@ -149,6 +149,7 @@
             <div class="right">
                 <div class="search"><i class="fa fa-search"></i>&nbsp; Search</div>
                 <div class="sidebar">
+                    {% if type != 'makesub' %}
                     {% if page and type == 'sub' %}
                         <a href="/r/{{ page.name }}/submit">
                             <div class="submitPost">
@@ -163,6 +164,7 @@
                         {{ page.sidebar }}
                         {% endif %}
                     </div>
+                    {% endif %}
                 </div>
             </div>
         </div>

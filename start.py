@@ -9,10 +9,6 @@ try:
 except ImportError:
     import aggregator.db as db
 
-# PROBLEMS:
-# flask-login doesn't work
-# @login_required redirects to /
-
 app = Flask(__name__)
 login = LoginManager(app)
 
@@ -53,11 +49,15 @@ def load_user(userid):
 @app.route('/r/<subname>/<sort>')
 def sub(subname='frontpage',sort='hot'):
     page = db.getSub(subname.lower())
-    posts = db.getPosts(subname.lower(),sort)
-    newposts = posts
-    for i in range(len(posts)):
-        newposts[i]['user_name'] = db.getUser(posts[i]['user_id'],'_id')['name']
-    return render_template('roddit.html',page=page,posts=posts,type='sub')
+    if page != None:
+        posts = db.getPosts(subname.lower(),sort)
+        newposts = posts
+        for i in range(len(posts)):
+            newposts[i]['user_name'] = db.getUser(posts[i]['user_id'],'_id')['name']
+            newposts[i]['sub_name'] = db.getSub(posts[i]['sub_id'],'_id')['name']
+        return render_template('roddit.html',page=page,posts=newposts,type='sub')
+    else:
+        return render_template('roddit.html',page=page,type='sub')
 
 @app.route('/r/<subname>/submit',methods=['GET','POST'])
 @login_required
@@ -65,11 +65,12 @@ def submit(subname):
     page = db.getSub(subname.lower())
     if request.method == 'POST':
         form = request.form
-        fail = db.addPost(current_user.get_id(),form['title'],form['link'],form['sub'],form['text'])
+        fail = db.addPost(current_user.get_id(),form['title'],form['link'],subname,form['text'])
         if fail:
             return render_template('roddit.html',page=page,type='submit',fail=True)
-    else:
-        return render_template('roddit.html',page=page,type='submit',fail=False)
+        else:
+            return redirect('/r/'+subname)
+    return render_template('roddit.html',page=page,type='submit',fail=False)
 
 @app.route('/createsub',methods=['GET','POST'])
 @login_required
@@ -80,7 +81,7 @@ def createsub():
         if fail:
             return render_template('roddit.html',type='makesub',fail=True)
         else:
-            return redirect('/'+sub['sub'])
+            return redirect('/r/'+form['name'].lower())
     else:
         return render_template('roddit.html',type='makesub',fail=False)
 
@@ -131,8 +132,12 @@ def user(user):
     posts = []
     if user:
         posts = db.getUserPosts(user['_id'])
-    return render_template('roddit.html',page=user,posts=posts,type='user')
+        newposts = posts
+        for i in range(len(posts)):
+            newposts[i]['user_name'] = db.getUser(posts[i]['user_id'],'_id')['name']
+            newposts[i]['sub_name'] = db.getSub(posts[i]['sub_id'],'_id')['name']
+    return render_template('roddit.html',page=user,posts=newposts,type='user')
 
 if __name__ == '__main__':
     app.secret_key = 'localhost'
-    app.run(port=80,debug=True,host='0.0.0.0')
+    app.run(port=80,debug=True,host='127.0.0.1')

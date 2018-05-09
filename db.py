@@ -3,6 +3,7 @@ import pymongo
 import re
 import hashlib
 import datetime
+from bson import ObjectId
 from string import ascii_letters, digits
 
 client = pymongo.MongoClient('localhost', 27017)
@@ -16,29 +17,33 @@ PERMITTED_CHARS = ascii_letters + digits + '_-'
 def sha256(msg):
     return hashlib.sha256(msg.encode('utf-8')).digest()
 
-def alphanumericify(msg):
-    return "".join([ch for ch in msg if ch in PERMITTED_CHARS])
+def alphanumericify(msg,extra=''):
+    return "".join([ch for ch in msg if ch in PERMITTED_CHARS+extra])
 
 def addPost(post):
     posts.insert_one(post)
     print('Added post:',post.title)
 
-def getPosts(sub,sort):
-    if sub == 'all':
-        subPosts = posts.find()
+def getPosts(subname,sort):
+    sub = getSub(subname)
+    if sub != None:
+        if subname == 'all':
+            subPosts = posts.find()
+        else:
+            subPosts = posts.find({'sub_id':sub['_id']})
+        if sort == 'hot':
+            return list(subPosts)
+        elif sort == 'new':
+            return list(subPosts.sort('date',pymongo.DESCENDING))
+        elif sort == 'top':
+            return list(subPosts.sort('score',pymongo.DESCENDING))
+        elif sort == 'controversial':
+            return list(subPosts.sort('score',pymongo.ASCENDING))
     else:
-        subPosts = posts.find({'sub':sub})
-    if sort == 'hot':
-        return list(subPosts)
-    elif sort == 'new':
-        return list(subPosts.sort('date',pymongo.DESCENDING))
-    elif sort == 'top':
-        return list(subPosts.sort('score',pymongo.DESCENDING))
-    elif sort == 'controversial':
-        return list(subPosts.sort('score',pymongo.ASCENDING))
+        return None
 
-def getSub(name):
-    return subs.find_one({'name':name})
+def getSub(name,prop='name'):
+    return subs.find_one({prop:name})
 
 def getUser(name,prop='name'):
     return users.find_one({prop:name})
@@ -48,27 +53,37 @@ def addUser(name,email,password):
     name = alphanumericify(name)
     match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$',email)
     password = sha256(password)
-    if match and name != '' and users.find({'email':email}).count() != 0:
+    if match and name != '' and users.find({'email':email}).count() == 0 and users.find({'name':name}).count() == 0:
         users.insert_one({'name':name,'email':email,'password':password})
         return True
     else:
         return False
 
-def addPost(uid,title,link,sub,text=''):
-    title = alphanumericify(title)
+def addPost(uid,title,link,subname,text=''):
+    title = alphanumericify(title,' ')
+    text = alphanumericify(text,' ')
     try:
-        posts.insert_one({'title':title,'link':link,'score':10,'user_id':uid,'text':text,'date':datetime.datetime.utcnow()})
-        return True
-    except:
+        #assert title != ''
+        #assert text != ''
+        sub = getSub(subname)
+        thumbnail = link # fix this
+        posts.insert_one({'title':title,'link':link,'thumbnail':thumbnail,'score':10,'sub_id':sub['_id'],'user_id':ObjectId(uid),'text':text,'date':datetime.datetime.utcnow()})
+        print('Inserted Post:',title)
         return False
+    except:
+        print('Error inserting post')
+        return True
 
 def createSub(uid,name,sidebar,primary,secondary):
-    name = alphanumericify(name)
-    sidebar = alphanumericify(sidebar)
+    name = alphanumericify(name).lower()
+    sidebar = alphanumericify(sidebar,' ')
     match1 = re.match('^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$',primary)
     match2 = re.match('^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$',secondary)
-    if match1 and match2 and name != '' and sidebar != '':
+    if match1 and match2 and name != '' and sidebar != '' and subs.find({'name':name}).count() == 0:
         subs.insert_one({'name':name,'sidebar':sidebar,'creator':uid,'primary':primary,'secondary':secondary})
+        return False
+    else:
+        return True
 
 def verifyUser(email,password):
     user = users.find_one({'email':email})
