@@ -101,7 +101,7 @@
                     {% elif type == 'submit' %}
                         <div class="form">
                             <div class="formTitle">
-                                Make a post to /r/{{ page.name }}
+                                Make a post to <span class="sub">/r/{{ page.name }}</span>
                             </div>
                             {% if fail %}
                             <div class="fail">Something in this form is wrong :(</div>
@@ -163,6 +163,10 @@
                         {% if page %}
                         {{ page.sidebar }}
                         {% endif %}
+                    </div>
+                    {% else %}
+                    <div class="sidebarContent">
+                        Remember to be nice!
                     </div>
                     {% endif %}
                 </div>

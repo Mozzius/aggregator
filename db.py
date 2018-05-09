@@ -69,21 +69,22 @@ def addPost(uid,title,link,subname,text=''):
         thumbnail = link # fix this
         posts.insert_one({'title':title,'link':link,'thumbnail':thumbnail,'score':10,'sub_id':sub['_id'],'user_id':ObjectId(uid),'text':text,'date':datetime.datetime.utcnow()})
         print('Inserted Post:',title)
-        return False
+        return True
     except:
         print('Error inserting post')
-        return True
+        return False
 
 def createSub(uid,name,sidebar,primary,secondary):
     name = alphanumericify(name).lower()
     sidebar = alphanumericify(sidebar,' ')
     match1 = re.match('^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$',primary)
     match2 = re.match('^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$',secondary)
-    if match1 and match2 and name != '' and sidebar != '' and subs.find({'name':name}).count() == 0:
+    #and name != '' and sidebar != ''
+    if match1 and match2 and subs.find({'name':name}).count() == 0:
         subs.insert_one({'name':name,'sidebar':sidebar,'creator':uid,'primary':primary,'secondary':secondary})
-        return False
-    else:
         return True
+    else:
+        return False
 
 def verifyUser(email,password):
     user = users.find_one({'email':email})

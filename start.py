@@ -65,11 +65,10 @@ def submit(subname):
     page = db.getSub(subname.lower())
     if request.method == 'POST':
         form = request.form
-        fail = db.addPost(current_user.get_id(),form['title'],form['link'],subname,form['text'])
-        if fail:
-            return render_template('roddit.html',page=page,type='submit',fail=True)
-        else:
+        if db.addPost(current_user.get_id(),form['title'],form['link'],subname,form['text']):
             return redirect('/r/'+subname)
+        else:
+            return render_template('roddit.html',page=page,type='submit',fail=True)
     return render_template('roddit.html',page=page,type='submit',fail=False)
 
 @app.route('/createsub',methods=['GET','POST'])
@@ -77,11 +76,10 @@ def submit(subname):
 def createsub():
     if request.method == 'POST':
         form = request.form
-        fail = db.createSub(current_user.id,form['name'],form['sidebar'],form['primary'],form['secondary'])
-        if fail:
-            return render_template('roddit.html',type='makesub',fail=True)
-        else:
+        if db.createSub(current_user.id,form['name'],form['sidebar'],form['primary'],form['secondary']):
             return redirect('/r/'+form['name'].lower())
+        else:
+            return render_template('roddit.html',type='makesub',fail=True)
     else:
         return render_template('roddit.html',type='makesub',fail=False)
 

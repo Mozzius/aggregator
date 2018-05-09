@@ -268,7 +268,7 @@ a {
     color: #626262;
 }
 
-.postSub > a {
+.postSub > a, .sub {
     font-variant: small-caps;
 }
 
