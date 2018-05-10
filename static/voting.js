@@ -9,7 +9,8 @@ function addPost(id,image) {
 
     if (image !== '') {
         console.log('img-'+id)
-        document.getElementById('img-'+id).style.backgroundImage="url('"+image+"')"
+        //document.getElementById('img-'+id).style.backgroundImage="url('"+image+"')"
+        document.getElementById('img-'+id).style.backgroundColor="red"
     }
 
     upvote.addEventListener('click',function () {
