@@ -8,6 +8,7 @@ function addPost(id,image) {
     var downvote = votingBox.childNodes[2]
 
     if (image !== '') {
+        console.log('img-'+id)
         document.getElementById('img-'+id).style.backgroundImage="url('"+image+"')"
     }
 
