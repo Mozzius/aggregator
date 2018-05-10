@@ -247,7 +247,7 @@ a {
     height: 50px;
     margin: 15px;
     background: #626262;
-    background-image: attr(src url,'https://s.pixelspeechbubble.com/pixel-speech-bubble-favicon.png')
+    background-image: attr(back url,'https://s.pixelspeechbubble.com/pixel-speech-bubble-favicon.png');
 }
 
 .postTitle {
