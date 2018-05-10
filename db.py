@@ -63,8 +63,8 @@ def addPost(uid,title,link,subname,text=''):
     title = alphanumericify(title,' ')
     text = alphanumericify(text,' ')
     try:
-        #assert title != ''
-        #assert text != ''
+        assert title != ''
+        assert text != ''
         sub = getSub(subname)
         thumbnail = link # fix this
         posts.insert_one({'title':title,'link':link,'thumbnail':thumbnail,'score':10,'sub_id':sub['_id'],'user_id':ObjectId(uid),'text':text,'date':datetime.datetime.utcnow()})

@@ -301,6 +301,13 @@ a {
     margin-bottom: 10px;
 }
 
+.fail {
+    width: 100%;
+    color: white;
+    border: 2px solid red;
+    background-color: #ff5e5e;
+}
+
 form > input, form > textarea {
     width: 100%;
     background-color: #f0f0f0;
@@ -308,6 +315,7 @@ form > input, form > textarea {
     padding: 7px;
     margin: 10px 0;
     border-radius: 3px;
+    resize: none;
 }
 
 input[type='button'], input[type='submit'] {
