@@ -298,11 +298,28 @@ a {
 
 .formTitle {
     font-size: 20px;
+    margin-bottom: 10px;
 }
 
 form > input, form > textarea {
     width: 100%;
+    background-color: #f0f0f0;
+    border: none;
+    padding: 7px;
+    margin: 10px 0;
+    border-radius: 3px;
 }
+
+input[type='button'], input[type='submit'] {
+    width: inital;
+    float: right;
+}
+
+input[type='button']:hover, input[type='submit']:hover {
+    color: white;
+    background-color: #1395ff;
+}
+
 
 .notfound {
     display: flex;
