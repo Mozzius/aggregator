@@ -1,11 +1,15 @@
 // adds event listeners for voting and sends them off to the server
 
-function addPost(id) {
+function addPost(id,image) {
     var votingBox = document.getElementById(id)
     var upvote = votingBox.childNodes[0]
     var score = votingBox.childNodes[1]
     console.log(score.textContent)
     var downvote = votingBox.childNodes[2]
+
+    if (image !== '') {
+        doccument.getElementById('img-'+id).style.backgroundImage="url('"+image+"')"
+    }
 
     upvote.addEventListener('click',function () {
         console.log('Upvote :)')
