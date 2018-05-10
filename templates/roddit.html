@@ -51,18 +51,18 @@
                                 <i class="fa fa-caret-up"></i>
                                 <p>{{ post.score }}</p>
                                 <i class="fa fa-caret-down"></i>
-                                <script defer>addPost('{{ post._id }}')</script>
                             </div>
                             <a href="{{ post.link }}">
                                 <div class="thumbnail" id="img-{{ post._id }}"></div>
                             </a>
                             <div class="postInner">
-                                <a href="{{ post.link }}">
+                                <a href="{% if post.link != '' %}{{ post.link }}{% else %}/r/{{ post.sub_name }}/post/{{ post._id }}{% endif %}">
                                     <span class="postTitle">{{ post.title }}</span>
                                 </a>
                                 <p class="postSub"><a href="/r/{{ post.sub_name }}/post/{{ post._id }}">{{ post.comments }} comments</a> &middot; submitted by <a href="/u/{{ post.user_name }}">/u/{{ post.user_name }}</a> to <a href="/r/{{ post.sub_name }}">/r/{{ post.sub_name }}</a></p>
                             </div>
                         </div>
+                        <script>addPost('{{ post._id }}','{{ post.link }}')</script>
                         {% endfor %}
                     {% elif type == 'signup' %}
                         <div class="form">

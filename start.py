@@ -59,6 +59,20 @@ def sub(subname='frontpage',sort='hot'):
     else:
         return render_template('roddit.html',page=page,type='sub')
 
+@app.route('/r/<subname>/post')
+def postNoId(subname):
+    return redirect('/r/'+subname)
+
+@app.route('/r/<subname>/post/<post_id>')
+def comments(subname,post_id):
+    page = db.getSub(subname.lower())
+    post = db.getPost(post_id)
+    if page != None and post != None:
+        comments = db.getComments(post_id)
+        return render_template('roodit.html',page=page,post=post,comments=comments,type='comments')
+    else:
+        return redirect('/r/'+subname)
+
 @app.route('/r/<subname>/submit',methods=['GET','POST'])
 @login_required
 def submit(subname):

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import pymongo
+import bleach
 import re
 import hashlib
 import datetime
@@ -42,11 +43,17 @@ def getPosts(subname,sort):
     else:
         return None
 
+def getPost(name,prop='_id'):
+    return posts.find_one({prop:name})
+
 def getSub(name,prop='name'):
     return subs.find_one({prop:name})
 
 def getUser(name,prop='name'):
     return users.find_one({prop:name})
+
+def getComments(name,post='post_id'):
+    return list(comments.find({prop,name}))
 
 def addUser(name,email,password):
     # need to get bleach working
@@ -60,9 +67,10 @@ def addUser(name,email,password):
         return False
 
 def addPost(uid,title,link,subname,text=''):
-    title = alphanumericify(title,' ')
-    text = alphanumericify(text,' ')
+    title = bleach.clean(title)
+    text = bleach.clean(text)
     try:
+        print(title != '')
         assert title != ''
         assert text != ''
         sub = getSub(subname)
@@ -76,7 +84,7 @@ def addPost(uid,title,link,subname,text=''):
 
 def createSub(uid,name,sidebar,primary,secondary):
     name = alphanumericify(name).lower()
-    sidebar = alphanumericify(sidebar,' ')
+    sidebar = bleach.clean(sidebar)
     match1 = re.match('^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$',primary)
     match2 = re.match('^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$',secondary)
     #and name != '' and sidebar != ''
