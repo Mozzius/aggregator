@@ -54,7 +54,7 @@
                                 <script defer>addPost('{{ post._id }}')</script>
                             </div>
                             <a href="{{ post.link }}">
-                                <img class="thumbnail" src="{{ post.thumbnail }}" alt="thumbnail" />
+                                <div class="thumbnail" src="{{ post.thumbnail }}"></div>
                             </a>
                             <div class="postInner">
                                 <a href="{{ post.link }}">
@@ -62,7 +62,7 @@
                                 </a>
                                 <p class="postSub"><a href="/r/{{ post.sub_name }}/post/{{ post._id }}">{{ post.comments }} comments</a> &middot; submitted by <a href="/u/{{ post.user_name }}">/u/{{ post.user_name }}</a> to <a href="/r/{{ post.sub_name }}">/r/{{ post.sub_name }}</a></p>
                             </div>
-                        </div>
+                        </a>
                         {% endfor %}
                     {% elif type == 'signup' %}
                         <div class="form">
