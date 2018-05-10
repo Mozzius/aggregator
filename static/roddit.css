@@ -308,7 +308,7 @@ a {
     border: 2px solid red;
     border-radius: 5px;
     background-color: #ff5e5e;
-    padding: 5px;
+    padding: 10px;
     margin-bottom: 10px;
 }
 
@@ -323,7 +323,8 @@ form > input, form > textarea {
 }
 
 input[type='button'], input[type='submit'] {
-    width: inital;
+    width: auto;
+    padding: 7px 20px;
     float: right;
 }
 
