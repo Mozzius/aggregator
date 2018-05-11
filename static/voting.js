@@ -2,12 +2,12 @@
 console.log('voting loaded')
 function addPost(id,image) {
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('Adding '+id)
-        console.log('Image: '+id)
-        var votingBox = document.getElementById(id)
-        var upvote = votingBox.childNodes[0]
-        var score = votingBox.childNodes[1]
-        var downvote = votingBox.childNodes[2]
+        var post = document.getElementById('post-'+id)
+        var upvote = document.getElementById('up-'+id)
+        var score = document.getElementById('score-'+id)
+        var downvote = document.getElementById('down-'+id)
+
+        console.log(post.classList)
 
         if (image !== '') {
             document.getElementById('img-'+id).style.backgroundImage="url('"+image+"')"
@@ -23,6 +23,7 @@ function addPost(id,image) {
                 // send unupvote to server
             }
             upvote.classList.toggle('upvoted')
+            post.classList.toggle('upvoted')
         })
 
         downvote.addEventListener('click',function () {
@@ -35,6 +36,7 @@ function addPost(id,image) {
                 // send undownvote to server
             }
             upvote.classList.toggle('downvoted')
+            post.classList.toggle('downvoted')
         })
     })
 

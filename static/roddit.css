@@ -233,6 +233,15 @@ a {
     border-left: 5px solid rgb(245, 245, 245);
 }
 
+.score {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 .postInner {
     width: calc(100% - 80px);
     padding-top: 15px;
@@ -355,7 +364,7 @@ input[type='button']:hover, input[type='submit']:hover {
     border-left: 5px solid #0365b6;
 }
 
-.upvoted, .upvoted:hover {
+div.upvoted, div.upvoted:hover {
     border-left: 5px solid #ec8f24;
 }
 

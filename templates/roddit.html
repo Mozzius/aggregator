@@ -46,11 +46,11 @@
                 <div class="mainContent">
                     {% if posts and page %}
                         {% for post in posts %}
-                        <div class="post">
-                            <div class="voting" id="{{ post._id }}">
-                                <i class="fa fa-caret-up"></i>
-                                <p>{{ post.score }}</p>
-                                <i class="fa fa-caret-down"></i>
+                        <div class="post" id="post-{{ post._id }}">
+                            <div class="voting">
+                                <i class="fa fa-caret-up" id="up-{{ post._id }}"></i>
+                                <p class ="score" id="score-{{ post._id }}">{{ post.score }}</p>
+                                <i class="fa fa-caret-down" id="down-{{ post._id }}"></i>
                             </div>
                             <a href="{{ post.link }}">
                                 <div class="thumbnail" id="img-{{ post._id }}"></div>
