@@ -69,7 +69,7 @@ def comments(subname,post_id):
     post = db.getPost(post_id)
     if page != None and post != None:
         comments = db.getComments(post_id)
-        return render_template('roodit.html',page=page,post=post,comments=comments,type='comments')
+        return render_template('roddit.html',page=page,post=post,comments=comments,type='comments')
     else:
         return redirect('/r/'+subname)
 
