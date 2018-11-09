@@ -6,12 +6,15 @@ import hashlib
 import datetime
 from bson import ObjectId
 from string import ascii_letters, digits
+import requests
+from bs4 import BeautifulSoup
 
 client = pymongo.MongoClient('localhost', 27017)
 
 posts = client.roddit.posts
 subs = client.roddit.subs
 users = client.roddit.users
+comments = client.roddit.comments
 
 PERMITTED_CHARS = ascii_letters + digits + '_-'
 
@@ -19,6 +22,7 @@ def sha256(msg):
     return hashlib.sha256(msg.encode('utf-8')).digest()
 
 def alphanumericify(msg,extra=''):
+    # for creating clean sub names
     return "".join([ch for ch in msg if ch in PERMITTED_CHARS+extra])
 
 def addPost(post):
@@ -53,11 +57,11 @@ def getUser(name,prop='name'):
     return users.find_one({prop:name})
 
 def getComments(name,post='post_id'):
-    return list(comments.find({prop,name}))
+    return list(comments.find({prop:name}))
 
 def addUser(name,email,password):
-    # need to get bleach working
-    name = alphanumericify(name)
+    # cleaning inputs
+    name = bleach.clean(name)
     match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$',email)
     password = sha256(password)
     if match and name != '' and users.find({'email':email}).count() == 0 and users.find({'name':name}).count() == 0:
@@ -103,3 +107,30 @@ def verifyUser(email,password):
 
 def getUserPosts(id):
     return list(posts.find({'user_id':id}).sort('date',pymongo.DESCENDING))
+
+### WARNING: BROKEN AS HECK ###
+
+def getThumb(url):
+    pass
+
+def generateThumb(url):
+    # get the largest image from the url
+    page = requests.get(url)
+    print(page)
+    soup = BeautifulSoup(page.text,'html5lib')
+    imgs = dict()
+    for img in soup.find_all('img'):
+        print(img.get('src'))
+        if img.get('src',False):
+            print(img.get('src'))
+            imgs[img.get('src'):img.get('width', 50)]
+    print('imgs:',imgs)
+    if imgs != {}:
+        src = max(imgs, key=lambda k: imgs[k])
+        print(src)
+    else:
+        return None
+
+#generateThumb('https://imgur.com/gallery/ZpRhfju')
+
+###############################
