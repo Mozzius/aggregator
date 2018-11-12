@@ -3,6 +3,7 @@ from flask import Flask, render_template, url_for, redirect, session, request
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user, UserMixin
 import hashlib
 from bson import ObjectId
+import json
 
 try:
     import db
@@ -47,15 +48,29 @@ def load_user(userid):
 @app.route('/')
 @app.route('/r/<subname>')
 @app.route('/r/<subname>/<sort>')
-def sub(subname='frontpage',sort='hot'):
+@app.route('/r/<subname>/post/<id>')
+def sub(subname='frontpage',sort='hot',id=False):
+    if request.url[-12:] == '/r/frontpage':
+        return redirect('/')
     page = db.getSub(subname.lower())
     if page != None:
-        posts = db.getPosts(subname.lower(),sort)
-        newposts = posts
-        for i in range(len(posts)):
-            newposts[i]['user_name'] = db.getUser(posts[i]['user_id'],'_id')['name']
-            newposts[i]['sub_name'] = db.getSub(posts[i]['sub_id'],'_id')['name']
-        return render_template('roddit.html',page=page,posts=newposts,type='sub')
+        if id:
+            # comments
+            comments = db.getComments(id)
+            post = db.getPost(id)
+            post['user_name'] = db.getUser(post['user_id'],'_id')['name']
+            return render_template('roddit.html',page=page,type='comments',post=post,comments=comments)
+        else:
+            # normal page
+            posts = db.getPosts(subname.lower(),sort)
+            for i in range(len(posts)):
+                # update the score
+                posts[i]['score'] = db.calcPostScore(posts[i])
+                posts[i]['user_name'] = db.getUser(posts[i]['user_id'],'_id')['name']
+                posts[i]['sub_name'] = db.getSub(posts[i]['sub_id'],'_id')['name']
+                posts[i]['total'] = posts[i]['upvotes'] - posts[i]['downvotes']
+            posts = sorted(posts, key=lambda k: k['score'], reverse=True)
+            return render_template('roddit.html',page=page,posts=posts,type='sub')
     else:
         return render_template('roddit.html',page=page,type='sub')
 
@@ -80,7 +95,7 @@ def submit(subname):
     if request.method == 'POST':
         form = request.form
         if db.addPost(current_user.get_id(),form['title'],form['link'],subname,form['text']):
-            return redirect('/r/'+subname)
+            return redirect('/r/'+subname+'/new')
         else:
             return render_template('roddit.html',page=page,type='submit',fail=True)
     return render_template('roddit.html',page=page,type='submit',fail=False)

@@ -50,7 +50,7 @@
                         <div class="post" id="post-{{ post._id }}">
                             <div class="voting">
                                 <i class="fa fa-caret-up" id="up-{{ post._id }}"></i>
-                                <p class ="score" id="score-{{ post._id }}">{{ post.score }}</p>
+                                <p class ="score" id="score-{{ post._id }}">{{ post.total }}</p>
                                 <i class="fa fa-caret-down" id="down-{{ post._id }}"></i>
                             </div>
                             <a href="{{ post.link }}">
@@ -63,8 +63,31 @@
                                 <p class="postSub"><a href="/r/{{ post.sub_name }}/post/{{ post._id }}">{{ post.comments }} comments</a> &middot; submitted by <a href="/u/{{ post.user_name }}">/u/{{ post.user_name }}</a> to <a href="/r/{{ post.sub_name }}">/r/{{ post.sub_name }}</a></p>
                             </div>
                         </div>
-                        <script>addPost('{{ post._id }}','{{ post.link }}')</script>
+                        {% if post.link %}
+                        <script async>addPost('{{ post._id }}','{{ post.link }}')</script>
+                        {% else %}
+                        <script async>addPost('{{ post._id }}','static/default.png')</script>
+                        {% endif %}
                         {% endfor %}
+                    {% elif type == 'comments' %}
+                    <div class="post" id="post-{{ post._id }}">
+                        <div class="voting">
+                            <i class="fa fa-caret-up" id="up-{{ post._id }}"></i>
+                            <p class ="score" id="score-{{ post._id }}">{{ post.score }}</p>
+                            <i class="fa fa-caret-down" id="down-{{ post._id }}"></i>
+                        </div>
+                        <a href="{{ post.link }}">
+                            <div class="thumbnail" id="img-{{ post._id }}"></div>
+                        </a>
+                        <div class="postInner">
+                            <a href="{% if post.link != '' %}{{ post.link }}{% else %}/r/{{ page.name }}/post/{{ post._id }}{% endif %}">
+                                <span class="postTitle">{{ post.title }}</span>
+                            </a>
+                            <p class="postSub">submitted by <a href="/u/{{ post.user_name }}">/u/{{ post.user_name }}</a> to <a href="/r/{{ page.name }}">/r/{{ page.name }}</a></p>
+                        </div>
+                    </div>
+                    <script>addPost('{{ post._id }}','{{ post.link }}')</script>
+                    <div class="postText">{{ post.text }}</div>
                     {% elif type == 'signup' %}
                         <div class="form">
                             <div class="formTitle">
