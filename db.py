@@ -108,8 +108,7 @@ def createSub(uid,name,sidebar,primary,secondary):
     match1 = re.match('^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$',primary)
     match2 = re.match('^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$',secondary)
     #and name != '' and sidebar != ''
-    print(subs.find({'name':name}).count())
-    if match1 and match2 and subs.find({'name':name}).count() == 0:
+    if match1 and match2 and subs.find({'name':name}).count() == 0 and name != 0:
         subs.insert_one({'name':name,'sidebar':sidebar,'creator':uid,'primary':primary,'secondary':secondary})
         return True
     else:
