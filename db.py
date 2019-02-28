@@ -77,7 +77,8 @@ def addUser(name,email,password):
 def addPost(uid,title,link,subname,text=''):
     title = bleach.clean(title)
     text = bleach.clean(text)
-    try:
+    #try:
+    if True:
         assert title != ''
         sub = getSub(subname)
         thumbnail = link # fix this
@@ -94,21 +95,22 @@ def addPost(uid,title,link,subname,text=''):
             'date':datetime.datetime.utcnow()
         }
         posts.insert_one(post)
-        print('Inserted Post:',title)
         calcPostScore(post)
         return True
-    except:
-        print('Error inserting post')
-        return False
+    #except:
+    #    return False
 
 def createSub(uid,name,sidebar,primary,secondary):
     name = alphanumericify(name).lower()
     sidebar = bleach.clean(sidebar)
     sidebar = bleach.linkify(sidebar)
-    match1 = re.match('^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$',primary)
-    match2 = re.match('^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$',secondary)
-    #and name != '' and sidebar != ''
-    if match1 and match2 and subs.find({'name':name}).count() == 0 and name != 0:
+    match1 = re.match('#^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$',primary)
+    match2 = re.match('#^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$',secondary)
+    if match1 == None:
+        primary == None
+    if match2 == None:
+        secondary == None
+    if subs.find({'name':name}).count() == 0 and name != 0:
         subs.insert_one({'name':name,'sidebar':sidebar,'creator':uid,'primary':primary,'secondary':secondary})
         return True
     else:
